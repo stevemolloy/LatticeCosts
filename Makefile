@@ -19,11 +19,11 @@ all: $(BIN)
 
 $(BIN): $(OBJS)
 	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) $(CINCLUDES) $^ -o $@ $(CLIBS)
+	$(CC) $(CFLAGS) $(CINCLUDES) -D_DEFAULT_SOURCE $^ -o $@ $(CLIBS)
 
 $(OBJ)/%.o: $(SRC)/%.c
 	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) $(CINCLUDES) -c $< -o $@
+	$(CC) $(CFLAGS) $(CINCLUDES) -D_DEFAULT_SOURCE -c $< -o $@
 
 clean:
 	rm -rf $(BINDIR) $(OBJ)

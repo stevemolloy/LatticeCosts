@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <sys/types.h>
+#include <dirent.h>
 #include "exe_lib.h"
 
 #include "mat.h"
