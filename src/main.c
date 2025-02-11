@@ -14,9 +14,9 @@ int main(void) {
   MATFile *mag_lims_file = NULL;
   mxArray *mag_lims_struct = NULL;
 
-  const char *latt_summ_filename = "LatticeSummaries.xlsx";
+  const char *latt_summ_filename = "data/LatticeSummaries.xlsx";
   const char *sheetname = "Summaries";
-  const char *mag_lims_filename = "IntMagnetStrengthLimits.mat";
+  const char *mag_lims_filename = "data/IntMagnetStrengthLimits.mat";
   const char *mag_lims_structname = "IntMagnetStrengthLimits";
 
   FamilyDefns fam_defns = {0};
