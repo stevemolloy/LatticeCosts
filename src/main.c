@@ -3,6 +3,7 @@
 
 #include <sys/types.h>
 #include <dirent.h>
+
 #include "exe_lib.h"
 
 #include "mat.h"
@@ -20,6 +21,29 @@ int main(void) {
   const char *sheetname = "Summaries";
   const char *mag_lims_filename = "data/IntMagnetStrengthLimits.mat";
   const char *mag_lims_structname = "IntMagnetStrengthLimits";
+  const char *cand_latt_dirname = "data/CandidateLattices/";
+  char temp_buffer[1024] = {0};
+
+  struct dirent *cand_latt_file_data;
+  DIR *cand_latt_dir = opendir(cand_latt_dirname);
+  while ((cand_latt_file_data = readdir(cand_latt_dir)) != NULL) {
+    if (cand_latt_file_data->d_type != DT_DIR) continue;
+    char *lattice_name = cand_latt_file_data->d_name;
+    if (strncmp(lattice_name, ".", 1) == 0) continue;
+
+    concat_strings(cand_latt_dirname, lattice_name, temp_buffer, sizeof(temp_buffer)/sizeof(temp_buffer[0]));
+    struct dirent *lattice_file_data;
+    DIR *lattice_dir = opendir(temp_buffer);
+    while ((lattice_file_data = readdir(lattice_dir)) != NULL) {
+      if (lattice_file_data->d_type != DT_REG) continue;
+      char *filename = lattice_file_data->d_name;
+      if (strncmp(filename, ".", 1)==0) continue;
+      if (!ends_with(filename, ".mat")) continue;
+      printf("%s: %s\n", lattice_name, filename);
+    }
+    if (lattice_dir) closedir(lattice_dir);
+  }
+  if (cand_latt_dir) closedir(cand_latt_dir);
 
   FamilyDefns fam_defns = {0};
   if (get_lattice_summaries(latt_summ_filename, sheetname, &fam_defns) < 0)

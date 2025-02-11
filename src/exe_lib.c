@@ -135,4 +135,19 @@ int row_callback(size_t row, size_t maxcol, void* callbackdata) {
   return 0;
 }
 
+void concat_strings(const char *str1, const char *str2, char *buffer, size_t buff_len) {
+  assert(strlen(str1) + strlen(str2) < buff_len && "Your buffer is too small");
+  memset(buffer, 0, buff_len);
+  strcpy(buffer, str1);
+  strcpy(buffer+strlen(str1), str2);
+}
+
+bool ends_with(const char *str, const char *suffix) {
+    if (!str || !suffix) return 0;
+    size_t lenstr = strlen(str);
+    size_t lensuffix = strlen(suffix);
+    if (lensuffix >  lenstr) return 0;
+    return strncmp(str + lenstr - lensuffix, suffix, lensuffix) == 0;
+}
+
 
