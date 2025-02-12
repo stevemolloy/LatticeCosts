@@ -49,6 +49,29 @@ typedef struct {
   FamilyLocations fam_locs;
 } FamilyDefns;
 
+typedef struct {
+  size_t capacity;
+  size_t length;
+  char **data;
+} CstringArray;
+
+typedef struct {
+  double min;
+  double max;
+} MagLimits;
+
+typedef struct {
+  size_t capacity;
+  size_t length;
+  MagLimits *data;
+} MagLimitsArray;
+
+typedef struct {
+  size_t capacity;
+  size_t length;
+  MagLimitsArray *data;
+} MagLimitsArrayArray;
+
 Matrix get_double_array_field(mxArray *ma, const char *fieldname);
 void print_matrix(Matrix mat);
 
@@ -59,6 +82,8 @@ int get_fam_strengths_callback(size_t row, size_t col, const char* value, void* 
 int row_callback(size_t row, size_t maxcol, void* callbackdata);
 void concat_strings(const char *str1, const char *str2, char *buffer, size_t buff_len);
 bool ends_with(const char *str, const char *suffix);
+extern char *mag_fam_names[];
+int get_mag_lims(const char *filename, MagLimitsArrayArray *mag_limits);
 
 #endif // !_EXE_LIB_H
 

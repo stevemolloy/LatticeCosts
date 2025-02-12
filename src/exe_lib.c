@@ -3,6 +3,7 @@
 
 #include <xlsxio_read.h>
 #include "matrix.h"
+#include "mat.h"
 
 #include "exe_lib.h"
 #include "sdm_lib.h"
@@ -148,6 +149,56 @@ bool ends_with(const char *str, const char *suffix) {
     size_t lensuffix = strlen(suffix);
     if (lensuffix >  lenstr) return 0;
     return strncmp(str + lenstr - lensuffix, suffix, lensuffix) == 0;
+}
+
+#define NUM_FAMS_WITH_LIMS 29
+int get_mag_lims(const char *filename, MagLimitsArrayArray *mag_limits) {
+  const char *mag_lims_structname = "IntMagnetStrengthLimits";
+
+  MATFile *mag_lims_file = matOpen(filename, "r");
+  if (mag_lims_file == NULL) {
+    fprintf(stderr, "ERROR: Unable to open MAT file: %s\n", filename);
+    return -1;
+  }
+
+  mxArray *mag_lims_struct = matGetVariable(mag_lims_file, mag_lims_structname);
+  if (mag_lims_struct == NULL) {
+    fprintf(stderr, "ERROR: Unable to read variable %s\n", mag_lims_structname);
+    return -1;
+  }
+
+  if (!mxIsStruct(mag_lims_struct)) {
+    fprintf(stderr, "Variable %s is not a structure.\n", mag_lims_structname);
+    return -1;
+  }
+
+  
+  for (size_t i=0; i<NUM_FAMS_WITH_LIMS; i++) {
+    const char *submag_lims_structname = mag_fam_names[i];
+    mxArray *Qfm_1 = mxGetField(mag_lims_struct, 0, submag_lims_structname);
+    Matrix mins = get_double_array_field(Qfm_1, "Mins");
+    Matrix maxs = get_double_array_field(Qfm_1, "Maxs");
+    Matrix cls = get_double_array_field(Qfm_1, "CLs");
+    if (mins.m != 1 || maxs.m != 1 || cls.m != 1) {
+      fprintf(stderr, "Unexpected matrix dims in %s\n", submag_lims_structname);
+      return -1;
+    }
+
+    MagLimitsArray lims_array = {0};
+    for (size_t j=0; j<(size_t)maxs.n; j++) {
+      MagLimits lims = {0};
+      lims.max = maxs.data[j];
+      if (strcmp(submag_lims_structname, "dipm_q")==0 || strcmp(submag_lims_structname, "dip_q")==0)
+        lims.min = mins.data[j];
+      SDM_ARRAY_PUSH(lims_array, lims);
+    }
+    SDM_ARRAY_PUSH((*mag_limits), lims_array);
+  }
+
+  mxDestroyArray(mag_lims_struct);
+  matClose(mag_lims_file);
+
+  return 0;
 }
 
 
