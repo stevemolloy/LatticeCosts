@@ -75,7 +75,7 @@ typedef struct {
 Matrix get_double_array_field(mxArray *ma, const char *fieldname);
 void print_matrix(Matrix mat);
 
-int get_lattice_summaries(const char *latt_summ_filename, const char *sheetname, FamilyDefns *fam_defns);
+int get_lattice_summaries(const char *latt_summ_filename, FamilyDefns *fam_defns);
 int print_sheet_name(const char *name, void *callbackdata);
 int get_fam_locs_callback(size_t row, size_t col, const char* value, void* callbackdata);
 int get_fam_strengths_callback(size_t row, size_t col, const char* value, void* callbackdata);
@@ -84,6 +84,9 @@ void concat_strings(const char *str1, const char *str2, char *buffer, size_t buf
 bool ends_with(const char *str, const char *suffix);
 extern char *mag_fam_names[];
 int get_mag_lims(const char *filename, MagLimitsArrayArray *mag_limits);
+#define TEMPBUFFLENGTH 1024
+extern char temp_buffer[];
+int get_list_of_lattice_files(const char *dirname, CstringArray *list_of_lattice_files);
 
 #endif // !_EXE_LIB_H
 

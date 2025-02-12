@@ -5,6 +5,9 @@
 #include "matrix.h"
 #include "mat.h"
 
+#include <sys/types.h>
+#include <dirent.h>
+
 #include "exe_lib.h"
 #include "sdm_lib.h"
 
@@ -35,7 +38,8 @@ int print_sheet_name(const char *name, void *callbackdata) {
   return 0;
 }
 
-int get_lattice_summaries(const char *latt_summ_filename, const char *sheetname, FamilyDefns *fam_defns) {
+int get_lattice_summaries(const char *latt_summ_filename, FamilyDefns *fam_defns) {
+  const char *sheetname = "Summaries";
   xlsxioreader xlsxioread = xlsxioread_open(latt_summ_filename);
   if (xlsxioread == NULL)
     return -1;
@@ -91,7 +95,7 @@ int get_fam_strengths_callback(size_t row, size_t col, const char* value, void* 
   if (col == 2) {
     // printf("Found a new family: '%s'\n", value);
     FamilyDefn new_family = {0};
-    new_family.name = malloc(strlen(value) + 1);
+    new_family.name = SDM_MALLOC(strlen(value) + 1);
     strcpy(new_family.name, value);
     SDM_ARRAY_PUSH(*fam_defns, new_family);
     return 0;
@@ -198,6 +202,42 @@ int get_mag_lims(const char *filename, MagLimitsArrayArray *mag_limits) {
   mxDestroyArray(mag_lims_struct);
   matClose(mag_lims_file);
 
+  return 0;
+}
+
+int get_list_of_lattice_files(const char *dirname, CstringArray *list_of_lattice_files) {
+  DIR *cand_latt_dir = opendir(dirname);
+  struct dirent *cand_latt_file_data;
+  while ((cand_latt_file_data = readdir(cand_latt_dir)) != NULL) {
+    if (cand_latt_file_data->d_type != DT_DIR || strncmp(cand_latt_file_data->d_name, ".", 1) == 0)
+      continue;
+    char *lattice_name = cand_latt_file_data->d_name;
+
+    size_t lattice_dir_full_length = strlen(dirname) + strlen(lattice_name) + 10;
+    char *lattice_dir_fullname = SDM_MALLOC(lattice_dir_full_length);
+    concat_strings(dirname, lattice_name, lattice_dir_fullname, lattice_dir_full_length);
+    lattice_dir_fullname[strlen(lattice_dir_fullname)] = '/';
+
+    struct dirent *lattice_file_data;
+    DIR *lattice_dir = opendir(lattice_dir_fullname);
+    while ((lattice_file_data = readdir(lattice_dir)) != NULL) {
+      if (lattice_file_data->d_type != DT_REG || strncmp(lattice_file_data->d_name, ".", 1)==0 || !ends_with(lattice_file_data->d_name, ".mat"))
+        continue;
+      char *filename = lattice_file_data->d_name;
+      concat_strings(lattice_name, ".mat", temp_buffer, TEMPBUFFLENGTH);
+      if (strcmp(filename, temp_buffer)!=0)
+        continue;
+
+      char *full_filename = SDM_MALLOC(strlen(lattice_dir_fullname) + strlen(filename) + 10);
+      strcpy(full_filename, lattice_dir_fullname);
+      strcpy(full_filename+strlen(lattice_dir_fullname), filename);
+
+      SDM_ARRAY_PUSH((*list_of_lattice_files), full_filename);
+    }
+    if (lattice_dir) closedir(lattice_dir);
+  }
+  if (cand_latt_dir) closedir(cand_latt_dir);
+  
   return 0;
 }
 
