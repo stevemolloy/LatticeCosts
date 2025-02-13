@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <string.h>
 
 #include "exe_lib.h"
 
