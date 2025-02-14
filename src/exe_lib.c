@@ -176,7 +176,6 @@ int get_mag_lims(const char *filename, MagLimitsArrayArray *mag_limits) {
     return -1;
   }
 
-  
   for (size_t i=0; i<NUM_FAMS_WITH_LIMS; i++) {
     const char *submag_lims_structname = mag_fam_names[i];
     mxArray *Qfm_1 = mxGetField(mag_lims_struct, 0, submag_lims_structname);
@@ -200,7 +199,7 @@ int get_mag_lims(const char *filename, MagLimitsArrayArray *mag_limits) {
   }
 
   mxDestroyArray(mag_lims_struct);
-  matClose(mag_lims_file);
+  matClose(mag_lims_file); mag_lims_file = NULL;
 
   return 0;
 }
@@ -241,4 +240,35 @@ int get_list_of_lattice_files(const char *dirname, CstringArray *list_of_lattice
   return 0;
 }
 
+int get_list_of_lattice_folders(const char *dirname, CstringArray *list_of_lattice_folders) {
+  DIR *cand_latt_dir = opendir(dirname);
+  struct dirent *cand_latt_file_data;
+  while ((cand_latt_file_data = readdir(cand_latt_dir)) != NULL) {
+    if (cand_latt_file_data->d_type != DT_DIR || strncmp(cand_latt_file_data->d_name, ".", 1) == 0)
+      continue;
+    char *lattice_name = cand_latt_file_data->d_name;
+
+    size_t lattice_dir_full_length = strlen(dirname) + strlen(lattice_name) + 10;
+    char *lattice_dir_fullname = SDM_MALLOC(lattice_dir_full_length);
+    concat_strings(dirname, lattice_name, lattice_dir_fullname, lattice_dir_full_length);
+    lattice_dir_fullname[strlen(lattice_dir_fullname)] = '/';
+
+    struct dirent *lattice_file_data;
+    DIR *lattice_dir = opendir(lattice_dir_fullname);
+    while ((lattice_file_data = readdir(lattice_dir)) != NULL) {
+      if (lattice_file_data->d_type != DT_REG || strncmp(lattice_file_data->d_name, ".", 1)==0 || !ends_with(lattice_file_data->d_name, ".mat"))
+        continue;
+      char *filename = lattice_file_data->d_name;
+      concat_strings(lattice_name, ".mat", temp_buffer, TEMPBUFFLENGTH);
+      if (strcmp(filename, temp_buffer)!=0)
+        continue;
+
+      SDM_ARRAY_PUSH((*list_of_lattice_folders), lattice_dir_fullname);
+    }
+    if (lattice_dir) closedir(lattice_dir);
+  }
+  if (cand_latt_dir) closedir(cand_latt_dir);
+  
+  return 0;
+}
 

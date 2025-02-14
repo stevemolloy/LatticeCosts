@@ -87,6 +87,7 @@ int get_mag_lims(const char *filename, MagLimitsArrayArray *mag_limits);
 #define TEMPBUFFLENGTH 1024
 extern char temp_buffer[];
 int get_list_of_lattice_files(const char *dirname, CstringArray *list_of_lattice_files);
+int get_list_of_lattice_folders(const char *dirname, CstringArray *list_of_lattice_files);
 
 #endif // !_EXE_LIB_H
 
