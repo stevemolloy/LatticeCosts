@@ -1,7 +1,8 @@
 #ifndef _EXE_LIB_H
 #define _EXE_LIB_H
 
-#include "matrix.h"
+#include <stdbool.h>
+#include <stdlib.h>
 
 #define RETURN_DEFER(VAL)    \
   do {                       \
@@ -14,12 +15,6 @@
     fprintf(stderr, (err_msg), __VA_ARGS__); \
     RETURN_DEFER(1);                         \
   } while (0)
-
-typedef struct {
-  double *data;
-  int m;
-  int n;
-} Matrix;
 
 typedef struct {
   size_t D1, D2, D3;
@@ -72,22 +67,14 @@ typedef struct {
   MagLimitsArray *data;
 } MagLimitsArrayArray;
 
-Matrix get_double_array_field(mxArray *ma, const char *fieldname);
-void print_matrix(Matrix mat);
-
-int get_lattice_summaries(const char *latt_summ_filename, FamilyDefns *fam_defns);
 int print_sheet_name(const char *name, void *callbackdata);
+int get_lattice_summaries(const char *latt_summ_filename, FamilyDefns *fam_defns);
 int get_fam_locs_callback(size_t row, size_t col, const char* value, void* callbackdata);
-int get_fam_strengths_callback(size_t row, size_t col, const char* value, void* callbackdata);
 int row_callback(size_t row, size_t maxcol, void* callbackdata);
+int get_fam_strengths_callback(size_t row, size_t col, const char* value, void* callbackdata);
+
 void concat_strings(const char *str1, const char *str2, char *buffer, size_t buff_len);
 bool ends_with(const char *str, const char *suffix);
-extern char *mag_fam_names[];
-int get_mag_lims(const char *filename, MagLimitsArrayArray *mag_limits);
-#define TEMPBUFFLENGTH 1024
-extern char temp_buffer[];
-int get_list_of_lattice_files(const char *dirname, CstringArray *list_of_lattice_files);
-int get_list_of_lattice_folders(const char *dirname, CstringArray *list_of_lattice_files);
 
 #endif // !_EXE_LIB_H
 
