@@ -113,6 +113,8 @@ int get_fam_locs_callback(size_t row, size_t col, const char* value, void* callb
 int row_callback(size_t row, size_t maxcol, void* callbackdata);
 int get_fam_strengths_callback(size_t row, size_t col, const char* value, void* callbackdata);
 const char *block_type_string(BlockType t);
+bool replace_due_to_mag(int cl);
+LatticeType get_lattice_type_from_name(const char *name);
 
 void concat_strings(const char *str1, const char *str2, char *buffer, size_t buff_len);
 bool ends_with(const char *str, const char *suffix);
