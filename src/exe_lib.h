@@ -112,6 +112,7 @@ int get_lattice_summaries(const char *latt_summ_filename, FamilyDefns *fam_defns
 int get_fam_locs_callback(size_t row, size_t col, const char* value, void* callbackdata);
 int row_callback(size_t row, size_t maxcol, void* callbackdata);
 int get_fam_strengths_callback(size_t row, size_t col, const char* value, void* callbackdata);
+const char *block_type_string(BlockType t);
 
 void concat_strings(const char *str1, const char *str2, char *buffer, size_t buff_len);
 bool ends_with(const char *str, const char *suffix);

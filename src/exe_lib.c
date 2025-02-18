@@ -450,6 +450,22 @@ int get_fam_strengths_callback(size_t row, size_t col, const char* value, void* 
   return 0;
 }
 
+const char *block_type_string(BlockType t) {
+  switch (t) {
+    case BLOCK_M1: return "M1";
+    case BLOCK_U1: return "U1";
+    case BLOCK_U2: return "U2";
+    case BLOCK_U3: return "U3";
+    case BLOCK_U4: return "U4";
+    case BLOCK_U5: return "U5";
+    case BLOCK_M2: return "M2";
+    case BLOCK_COUNT: {
+      fprintf(stderr, "ERROR: Block type is ill-defined. This should be unreachable.\n");
+      exit(1);
+    }
+  }
+}
+
 int row_callback(size_t row, size_t maxcol, void* callbackdata) {
   (void)callbackdata;
   (void)maxcol;
