@@ -51,32 +51,35 @@ int main(void) {
   printf("Found %zu lattices in %s\n", fam_defns.length, latt_summ_filename);
   for (size_t i=0; i<fam_defns.length; i++) {
     FamilyDefn fam = fam_defns.data[i];
+    printf("%s :: ", fam.name);
+
     LatticeType lat_type = get_lattice_type_from_name(fam.name);
     if (lat_type == LATT_UNKNOWN) {
-      printf("WARNING: Lattice %s is unknown. Not analysing\n", fam.name);
+      printf("WARNING: Layout of \"%s\" is unknown.\n", fam.name);
       continue;
     }
 
-    bool m1_blocks_replaced = false;
-    for (size_t mag_ind=0; mag_ind<MAG_COUNT; mag_ind++) {
-      if (global_latt_defns[lat_type][BLOCK_M1][mag_ind] && replace_due_to_mag(fam.cls[mag_ind])) {
-        m1_blocks_replaced = true;
-        break;
+    bool blocks_replaced[BLOCK_COUNT] = {false};
+    bool any_blocks_replaced = false;
+    for (size_t block_ind=0; block_ind<BLOCK_COUNT; block_ind++) {
+      for (size_t mag_ind=0; mag_ind<MAG_COUNT; mag_ind++) {
+        if (global_latt_defns[lat_type][block_ind][mag_ind] && replace_due_to_mag(fam.cls[mag_ind])) {
+          blocks_replaced[block_ind] = true;
+          any_blocks_replaced = true;
+          break;
+        }
       }
     }
-    if (m1_blocks_replaced) {
-      printf("Oh no! Have to replace the M1 block for %s!\n", fam.name);
-    } else {
-      printf("Yay! M1 block does not need replaced for %s!\n", fam.name);
+
+    printf("\tThe following blocks need to be replaced:  ");
+    for (size_t block_ind=0; block_ind<BLOCK_COUNT; block_ind++) {
+      if (blocks_replaced[block_ind]) {
+        printf("%s, ", block_type_string(block_ind));
+      }
     }
-    // bool blocks_replaced[BLOCK_COUNT] = {false};
-    // 
-    // for (size_t mag_ind=0; mag_ind<MAG_COUNT; mag_ind++) {
-    //   if (replace_due_to_mag(fam.cls[mag_ind])) {
-    //     blocks_replaced[BLOCK_M1] = true;
-    //     break;
-    //   }
-    // }
+    if (!any_blocks_replaced) printf("-");
+
+    printf("\n");
   }
 
 dealloc_and_return:
