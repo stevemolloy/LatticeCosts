@@ -16,25 +16,64 @@
     RETURN_DEFER(1);                         \
   } while (0)
 
+typedef enum {
+  MAG_D1=0, MAG_D1Q, MAG_D2, MAG_D2Q, MAG_D3, MAG_D3Q,
+  MAG_Q1, MAG_Q2, MAG_Q3, MAG_Q4, MAG_Q5, MAG_Q6,
+  MAG_R1, MAG_R2, MAG_R3,
+  MAG_S1, MAG_S2, MAG_S3, MAG_S4, MAG_S5, MAG_S6,
+  MAG_O1, MAG_O2, MAG_O3,
+  MAG_T1, MAG_T2,
+  MAG_S1_COMBINED, MAG_S3_COMBINED, MAG_S6_COMBINED,
+  MAG_COUNT
+} MagType;
+
+typedef enum {
+  BLOCK_M1,
+  BLOCK_U1, BLOCK_U2, BLOCK_U3, BLOCK_U4, BLOCK_U5,
+  BLOCK_M2,
+  BLOCK_COUNT
+} BlockType;
+
+typedef enum {
+  LATT_UNKNOWN,
+  LATT_A01, LATT_A02, 
+  LATT_B01, LATT_B02, LATT_B03,
+  LATT_C01, LATT_D01, LATT_E01,
+  LATT_F01, LATT_F02,
+  LATT_G01,
+  LATT_H01, LATT_H02,
+  LATT_I01,
+  LATT_COUNT
+} LatticeType;
+
+typedef bool BlockDefinition[MAG_COUNT];
+typedef BlockDefinition LatticeDefinition[BLOCK_COUNT];
+
+#define ARRAY_LEN(arr) sizeof((arr)) / sizeof((arr)[0])
+
 typedef struct {
-  size_t D1, D2, D3;
-  size_t Q1, Q2, Q3, Q4, Q5, Q6;
-  size_t R1, R2, R3;
-  size_t S1, S2, S3, S4, S5, S6;
-  size_t O1, O2, O3;
-  size_t T1, T2;
-  size_t S1_combined, S3_combined, S6_combined;
+  size_t D1_value, D2_value, D3_value;
+  size_t D1q_value, D2q_value, D3q_value;
+  size_t Q1_value, Q2_value, Q3_value, Q4_value, Q5_value, Q6_value;
+  size_t R1_value, R2_value, R3_value;
+  size_t S1_value, S2_value, S3_value, S4_value, S5_value, S6_value;
+  size_t O1_value, O2_value, O3_value;
+  size_t T1_value, T2_value;
+  size_t S1_combined_value, S3_combined_value, S6_combined_value;
+  size_t D1_cl, D2_cl, D3_cl;
+  size_t D1q_cl, D2q_cl, D3q_cl;
+  size_t Q1_cl, Q2_cl, Q3_cl, Q4_cl, Q5_cl, Q6_cl;
+  size_t R1_cl, R2_cl, R3_cl;
+  size_t S1_cl, S2_cl, S3_cl, S4_cl, S5_cl, S6_cl;
+  size_t O1_cl, O2_cl, O3_cl;
+  size_t T1_cl, T2_cl;
+  size_t S1_combined_cl, S3_combined_cl, S6_combined_cl;
 } FamilyLocations;
 
 typedef struct {
   char *name;
-  double D1, D2, D3;
-  double Q1, Q2, Q3, Q4, Q5, Q6;
-  double R1, R2, R3;
-  double S1, S2, S3, S4, S5, S6;
-  double O1, O2, O3;
-  double T1, T2;
-  double S1_combined, S3_combined, S6_combined;
+  double values[MAG_COUNT];
+  int cls[MAG_COUNT];
 } FamilyDefn;
 
 typedef struct {
@@ -67,6 +106,7 @@ typedef struct {
   MagLimitsArray *data;
 } MagLimitsArrayArray;
 
+void set_lattice_definitions(void);
 int print_sheet_name(const char *name, void *callbackdata);
 int get_lattice_summaries(const char *latt_summ_filename, FamilyDefns *fam_defns);
 int get_fam_locs_callback(size_t row, size_t col, const char* value, void* callbackdata);

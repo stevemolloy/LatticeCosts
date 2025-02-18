@@ -254,5 +254,11 @@ void *sdm_arena_alloc(sdm_arena_t *arena, size_t size);
 void *sdm_arena_realloc(sdm_arena_t *arena, void *ptr, size_t size);
 void sdm_arena_free(sdm_arena_t *arena);
 
+typedef enum {
+  SDM_LOG_ERR,
+  SDM_LOG_WARN,
+  SDM_LOG_INFO,
+} LogLevel;
+
 #endif /* ifndef _SDM_LIB_H */
 
