@@ -107,6 +107,7 @@ typedef struct {
 } MagLimitsArrayArray;
 
 void set_lattice_definitions(void);
+void set_block_costs(void);
 int print_sheet_name(const char *name, void *callbackdata);
 int get_lattice_summaries(const char *latt_summ_filename, FamilyDefns *fam_defns);
 int get_fam_locs_callback(size_t row, size_t col, const char* value, void* callbackdata);
