@@ -386,15 +386,15 @@ int get_fam_locs_callback(size_t row, size_t col, const char* value, void* callb
   }
   else if (strcmp(value, "R1")==0) {
     if (fam_locs->R1_value == 0) fam_locs->R1_value = col;
-    else fam_locs->R1_cl = col;
+    else fam_locs->R1_cl = col + 1;
   }
   else if (strcmp(value, "R2")==0) {
     if (fam_locs->R2_value == 0) fam_locs->R2_value = col;
-    else fam_locs->R2_cl = col;
+    else fam_locs->R2_cl = col + 1;
   }
   else if (strcmp(value, "R3")==0) {
     if (fam_locs->R3_value == 0) fam_locs->R3_value = col;
-    else fam_locs->R3_cl = col;
+    else fam_locs->R3_cl = col + 1;
   }
   else if (strcmp(value, "S1")==0) {
     if (fam_locs->S1_value == 0) fam_locs->S1_value = col;
