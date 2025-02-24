@@ -28,14 +28,14 @@ typedef enum {
 } MagType;
 
 typedef enum {
-  BLOCK_M1,
+  BLOCK_M1=0,
   BLOCK_U1, BLOCK_U2, BLOCK_U3, BLOCK_U4, BLOCK_U5,
   BLOCK_M2,
   BLOCK_COUNT
 } BlockType;
 
 typedef enum {
-  LATT_UNKNOWN,
+  LATT_UNKNOWN=0,
   LATT_A01, LATT_A02, 
   LATT_B01, LATT_B02, LATT_B03,
   LATT_C01, LATT_D01, LATT_E01,
