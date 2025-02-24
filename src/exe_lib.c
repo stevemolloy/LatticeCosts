@@ -314,15 +314,40 @@ int print_sheet_name(const char *name, void *callbackdata) {
   return 0;
 }
 
-int get_lattice_summaries(const char *latt_summ_filename, FamilyDefns *fam_defns) {
-  const char *sheetname = "Summaries";
+int get_lattice_summaries(const char *latt_summ_filename, FamilyDefns *fam_defns, Info *info) {
   xlsxioreader xlsxioread = xlsxioread_open(latt_summ_filename);
   if (xlsxioread == NULL)
     return -1;
 
-  xlsxioread_process(xlsxioread, sheetname, XLSXIOREAD_SKIP_NONE, &get_fam_locs_callback, &row_callback, &(fam_defns->fam_locs));
-  xlsxioread_process(xlsxioread, sheetname, XLSXIOREAD_SKIP_NONE, &get_fam_strengths_callback, &row_callback, fam_defns);
+  const char *datasheet_name = "Summaries";
+  xlsxioread_process(xlsxioread, datasheet_name, XLSXIOREAD_SKIP_NONE, &get_fam_locs_callback, &row_callback, &(fam_defns->fam_locs));
+  xlsxioread_process(xlsxioread, datasheet_name, XLSXIOREAD_SKIP_NONE, &get_fam_strengths_callback, &row_callback, fam_defns);
+
+  const char *infosheet_name = "Info";
+  xlsxioread_process(xlsxioread, infosheet_name, XLSXIOREAD_SKIP_NONE, &get_info_details_callback, &row_callback, info);
   xlsxioread_close(xlsxioread);
+
+  return 0;
+}
+
+int get_info_details_callback(size_t row, size_t col, const char* value, void* callbackdata) {
+  if (value == NULL) return 0;
+  Info *info = (Info*)callbackdata;
+  (void)row;
+
+  size_t sz = strlen(value);
+  if (col == 2) {
+    info->date = strtol(value, NULL, 10);
+  } else if (col == 3) {
+    memset(info->version, 0, DEFAULT_INFO_BUFF_LEN);
+    memcpy(info->version, value, sz > DEFAULT_INFO_BUFF_LEN ? DEFAULT_INFO_BUFF_LEN : sz);
+  } else if (col == 4) {
+    memset(info->by, 0, DEFAULT_INFO_BUFF_LEN);
+    memcpy(info->by, value, sz > DEFAULT_INFO_BUFF_LEN ? DEFAULT_INFO_BUFF_LEN : sz);
+  } else if (col == 5) {
+    memset(info->description, 0, DEFAULT_INFO_BUFF_LEN);
+    memcpy(info->description, value, sz > DEFAULT_INFO_BUFF_LEN ? DEFAULT_INFO_BUFF_LEN : sz);
+  }
 
   return 0;
 }
@@ -579,5 +604,44 @@ bool ends_with(const char *str, const char *suffix) {
     size_t lensuffix = strlen(suffix);
     if (lensuffix >  lenstr) return 0;
     return strncmp(str + lenstr - lensuffix, suffix, lensuffix) == 0;
+}
+
+// Function to check if a year is a leap year
+static int is_leap_year(int year) {
+    return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+}
+
+// Function to convert days since 1900-01-01 to a date string
+char* days_to_date(int days) {
+    int year = 1900;
+    int month = 1;
+    int day = 1;
+    static char date[11];
+    
+    // Adjust for correct day alignment
+    days -= 2; // Corrects the two-day error
+
+    // Days in each month (non-leap year)
+    int days_in_month[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    
+    // Process years
+    while (days >= (is_leap_year(year) ? 366 : 365)) {
+        days -= is_leap_year(year) ? 366 : 365;
+        year++;
+    }
+    
+    // Process months
+    while (days >= ((month == 2 && is_leap_year(year)) ? 29 : days_in_month[month - 1])) {
+        days -= (month == 2 && is_leap_year(year)) ? 29 : days_in_month[month - 1];
+        month++;
+    }
+    
+    // Remaining days determine the final day
+    day += days;
+    
+    // Format the date string as YYYY-MM-DD
+    snprintf(date, sizeof(date), "%04d-%02d-%02d", year, month, day);
+    
+    return date;
 }
 

@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+#define ARRAY_LEN(arr) sizeof((arr)) / sizeof((arr)[0])
+
 #define RETURN_DEFER(VAL)    \
   do {                       \
     retval=(VAL);            \
@@ -49,8 +51,6 @@ typedef enum {
 typedef bool BlockDefinition[MAG_COUNT];
 typedef BlockDefinition LatticeDefinition[BLOCK_COUNT];
 
-#define ARRAY_LEN(arr) sizeof((arr)) / sizeof((arr)[0])
-
 typedef struct {
   size_t D1_value, D2_value, D3_value;
   size_t D1q_value, D2q_value, D3q_value;
@@ -85,6 +85,14 @@ typedef struct {
   FamilyLocations fam_locs;
 } FamilyDefns;
 
+#define DEFAULT_INFO_BUFF_LEN 128
+typedef struct {
+  int date;
+  char *version;
+  char *by;
+  char *description;
+} Info;
+
 typedef struct {
   size_t capacity;
   size_t length;
@@ -113,10 +121,11 @@ void set_block_costs(void);
 bool get_blocks_replaced(FamilyDefn fam, bool *blocks_replaced_array, size_t num_blocks);
 double total_block_replacement_costs(bool *blocks_replaced, double *costs, size_t block_count);
 int print_sheet_name(const char *name, void *callbackdata);
-int get_lattice_summaries(const char *latt_summ_filename, FamilyDefns *fam_defns);
+int get_lattice_summaries(const char *latt_summ_filename, FamilyDefns *fam_defns, Info *info);
 int get_fam_locs_callback(size_t row, size_t col, const char* value, void* callbackdata);
 int row_callback(size_t row, size_t maxcol, void* callbackdata);
 int get_fam_strengths_callback(size_t row, size_t col, const char* value, void* callbackdata);
+int get_info_details_callback(size_t row, size_t col, const char* value, void* callbackdata);
 const char *block_type_string(BlockType t);
 bool any_true(bool *array, size_t len);
 bool replace_due_to_mag(int cl);
@@ -124,6 +133,7 @@ LatticeType get_lattice_type_from_name(const char *name);
 
 void concat_strings(const char *str1, const char *str2, char *buffer, size_t buff_len);
 bool ends_with(const char *str, const char *suffix);
+char* days_to_date(int days);
 
 #endif // !_EXE_LIB_H
 

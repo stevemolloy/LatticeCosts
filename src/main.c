@@ -29,9 +29,21 @@ int main(void) {
 
   // Get data from lattice summary spreadsheet
   FamilyDefns fam_defns = {0};
-  if (get_lattice_summaries(latt_summ_filename, &fam_defns) < 0)
+  Info info = {0};
+  info.version = SDM_MALLOC(DEFAULT_INFO_BUFF_LEN);
+  info.by = SDM_MALLOC(DEFAULT_INFO_BUFF_LEN);
+  info.description = SDM_MALLOC(DEFAULT_INFO_BUFF_LEN);
+  if (get_lattice_summaries(latt_summ_filename, &fam_defns, &info) < 0)
     REPORT_AND_DIE("Error opening .xlsx file: %s\n", latt_summ_filename);
-  printf("Found %zu lattices in %s\n", fam_defns.length, latt_summ_filename);
+
+  printf("--------------------------------------------------------\n");
+  printf("Info for %s\n", latt_summ_filename);
+  printf("\tVersion:       %s\n", info.version);
+  printf("\tDate:          %s\n", days_to_date(info.date));
+  printf("\tBy:            %s\n", info.by);
+  printf("\tDescription:   %s\n", info.description);
+  printf("\tLattice count: %zu\n", fam_defns.length);
+  printf("--------------------------------------------------------\n");
 
   for (size_t i=0; i<fam_defns.length; i++) {
     FamilyDefn fam = fam_defns.data[i];
