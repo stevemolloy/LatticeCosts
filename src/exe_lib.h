@@ -108,12 +108,14 @@ typedef struct {
 
 void set_lattice_definitions(void);
 void set_block_costs(void);
+bool get_blocks_replaced(FamilyDefn fam, bool *blocks_replaced_array, size_t num_blocks);
 int print_sheet_name(const char *name, void *callbackdata);
 int get_lattice_summaries(const char *latt_summ_filename, FamilyDefns *fam_defns);
 int get_fam_locs_callback(size_t row, size_t col, const char* value, void* callbackdata);
 int row_callback(size_t row, size_t maxcol, void* callbackdata);
 int get_fam_strengths_callback(size_t row, size_t col, const char* value, void* callbackdata);
 const char *block_type_string(BlockType t);
+bool any_true(bool *array, size_t len);
 bool replace_due_to_mag(int cl);
 LatticeType get_lattice_type_from_name(const char *name);
 

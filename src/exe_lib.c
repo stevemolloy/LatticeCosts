@@ -253,6 +253,30 @@ void set_lattice_definitions(void) {
   for (size_t i=0; i<ARRAY_LEN(i01_m2_indices); i++) global_latt_defns[LATT_I01][BLOCK_M2][i01_m2_indices[i]] = true;
 }
 
+bool get_blocks_replaced(FamilyDefn fam, bool *blocks_replaced_array, size_t num_blocks) {
+  LatticeType lat_type = get_lattice_type_from_name(fam.name);
+  if (lat_type == LATT_UNKNOWN) {
+    printf("WARNING: Layout of \"%s\" is unknown.\n", fam.name);
+    return false;
+  }
+
+  for (size_t block_ind=0; block_ind<num_blocks; block_ind++) {
+    for (size_t mag_ind=0; mag_ind<MAG_COUNT; mag_ind++) {
+      if (global_latt_defns[lat_type][block_ind][mag_ind] && replace_due_to_mag(fam.cls[mag_ind])) {
+        blocks_replaced_array[block_ind] = true;
+        break;
+      }
+    }
+  }
+  return true;
+}
+
+bool any_true(bool *array, size_t len) {
+  for (size_t i=0; i<len; i++)
+    if (array[i]) return true;
+  return false;
+}
+
 bool replace_due_to_mag(int cl) {
   return cl >= 10;
 }
