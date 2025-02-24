@@ -68,12 +68,14 @@ typedef struct {
   size_t O1_cl, O2_cl, O3_cl;
   size_t T1_cl, T2_cl;
   size_t S1_combined_cl, S3_combined_cl, S6_combined_cl;
+  size_t HW_check;
 } FamilyLocations;
 
 typedef struct {
   char *name;
   double values[MAG_COUNT];
   int cls[MAG_COUNT];
+  bool HW_check;
 } FamilyDefn;
 
 typedef struct {

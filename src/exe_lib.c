@@ -333,7 +333,9 @@ int get_fam_locs_callback(size_t row, size_t col, const char* value, void* callb
   if (value == NULL) return 0;
   if (row != 2) return 0;
 
-  if (strcmp(value, "D1")==0) {
+  if (strcmp(value, "Hardware Check\n?")==0) {
+    fam_locs->HW_check = col;
+  } else if (strcmp(value, "D1")==0) {
     if (fam_locs->D1_value == 0) {
       fam_locs->D1_value  = col;
       fam_locs->D1q_value = col + 1;
@@ -530,6 +532,13 @@ int get_fam_strengths_callback(size_t row, size_t col, const char* value, void* 
   else if (col == fam_defns->fam_locs.S1_combined_cl) fam_defns->data[index_of_last].cls[MAG_S1_COMBINED] = strtol(value, NULL, 10);
   else if (col == fam_defns->fam_locs.S3_combined_cl) fam_defns->data[index_of_last].cls[MAG_S3_COMBINED] = strtol(value, NULL, 10);
   else if (col == fam_defns->fam_locs.S6_combined_cl) fam_defns->data[index_of_last].cls[MAG_S6_COMBINED] = strtol(value, NULL, 10);
+  else if (col == fam_defns->fam_locs.HW_check) {
+    if (value != NULL) {
+      if (strncmp(value, "Y", 1) == 0) {
+        fam_defns->data[index_of_last].HW_check = true;
+      }
+    }
+  }
 
   return 0;
 }

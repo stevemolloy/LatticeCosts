@@ -35,6 +35,7 @@ int main(void) {
 
   for (size_t i=0; i<fam_defns.length; i++) {
     FamilyDefn fam = fam_defns.data[i];
+    if (!fam.HW_check) continue;
     printf("%s :: ", fam.name);
 
     bool blocks_replaced[BLOCK_COUNT] = {false};
