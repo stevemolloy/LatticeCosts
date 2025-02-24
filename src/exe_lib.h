@@ -118,6 +118,7 @@ typedef struct {
 
 void set_lattice_definitions(void);
 void set_block_masses(void);
+void set_block_build_costs(void);
 void set_block_costs(void);
 bool get_blocks_replaced(FamilyDefn fam, bool *blocks_replaced_array, size_t num_blocks);
 double total_block_replacement_costs(bool *blocks_replaced, double *costs, size_t block_count);

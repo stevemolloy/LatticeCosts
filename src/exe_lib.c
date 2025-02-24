@@ -12,6 +12,24 @@
 
 extern LatticeDefinition global_latt_defns[LATT_COUNT];
 extern double block_mass[BLOCK_COUNT];
+extern double block_costs[BLOCK_COUNT];
+extern double EUR_PER_METRICTONNE_STEEL;
+double EUR2SEK;
+
+void set_block_costs(void) {
+  set_block_build_costs();
+  set_block_masses();
+
+  double sek_per_kg_steel = (EUR_PER_METRICTONNE_STEEL / 1000.0) * EUR2SEK;
+
+  block_costs[BLOCK_M1] += block_mass[BLOCK_M1] * sek_per_kg_steel;
+  block_costs[BLOCK_M2] += block_mass[BLOCK_M2] * sek_per_kg_steel;
+  block_costs[BLOCK_U1] += block_mass[BLOCK_U1] * sek_per_kg_steel;
+  block_costs[BLOCK_U2] += block_mass[BLOCK_U2] * sek_per_kg_steel;
+  block_costs[BLOCK_U4] += block_mass[BLOCK_U4] * sek_per_kg_steel;
+  block_costs[BLOCK_U5] += block_mass[BLOCK_U5] * sek_per_kg_steel;
+  block_costs[BLOCK_U3] += block_mass[BLOCK_U3] * sek_per_kg_steel;
+}
 
 void set_block_masses(void) {
   block_mass[BLOCK_M1] = 2.5e3; // kg

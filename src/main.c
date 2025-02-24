@@ -9,7 +9,7 @@
 
 double block_costs[BLOCK_COUNT] = {0};
 double block_mass[BLOCK_COUNT] = {0};
-double sek_per_kg_steel;
+double EUR_PER_METRICTONNE_STEEL;
 
 LatticeDefinition global_latt_defns[LATT_COUNT];
 
