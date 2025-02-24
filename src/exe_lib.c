@@ -281,6 +281,13 @@ bool replace_due_to_mag(int cl) {
   return cl >= 10;
 }
 
+double total_block_replacement_costs(bool *blocks_replaced, double *costs, size_t block_count) {
+  double cost = 0;
+  for (size_t block_ind=0; block_ind<block_count; block_ind++)
+    if (blocks_replaced[block_ind]) cost += costs[block_ind];
+  return cost;
+}
+
 LatticeType get_lattice_type_from_name(const char *name) {
   if (strcmp(name, "m4 Standard Lattice") == 0) return LATT_A01;
   if (strlen(name) < 10) return LATT_UNKNOWN;

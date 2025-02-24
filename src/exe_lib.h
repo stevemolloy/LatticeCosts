@@ -109,6 +109,7 @@ typedef struct {
 void set_lattice_definitions(void);
 void set_block_costs(void);
 bool get_blocks_replaced(FamilyDefn fam, bool *blocks_replaced_array, size_t num_blocks);
+double total_block_replacement_costs(bool *blocks_replaced, double *costs, size_t block_count);
 int print_sheet_name(const char *name, void *callbackdata);
 int get_lattice_summaries(const char *latt_summ_filename, FamilyDefns *fam_defns);
 int get_fam_locs_callback(size_t row, size_t col, const char* value, void* callbackdata);

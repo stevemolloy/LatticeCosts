@@ -19,13 +19,6 @@ static sdm_arena_t *active_arena = &main_arena;
 void *active_alloc(size_t size)              { return sdm_arena_alloc(active_arena, size); }
 void *active_realloc(void *ptr, size_t size) { return sdm_arena_realloc(active_arena, ptr, size); }
 
-double total_block_replacement_costs(bool *blocks_replaced, double *costs, size_t block_count) {
-  double cost = 0;
-  for (size_t block_ind=0; block_ind<block_count; block_ind++)
-    if (blocks_replaced[block_ind]) cost += costs[block_ind];
-  return cost;
-}
-
 int main(void) {
   int retval = 0;
 
