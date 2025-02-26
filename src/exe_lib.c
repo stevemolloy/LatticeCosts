@@ -72,7 +72,7 @@ void set_lattice_definitions(void) {
   int b01_m1_indices[] = {MAG_O1, MAG_Q1, MAG_O2, MAG_Q2, MAG_D1, MAG_D1Q, MAG_O3, MAG_S1};
   int b01_u1_indices[] = {MAG_Q3, MAG_S2, MAG_Q4, MAG_S3, MAG_D2, MAG_D2Q};
   int b01_u2_indices[] = {MAG_Q5, MAG_S4, MAG_Q6, MAG_S3, MAG_D2, MAG_D2Q};
-  int b01_u3_indices[] = {MAG_R1, MAG_S5, MAG_R2, MAG_S3, MAG_D3, MAG_D3Q};
+  int b01_u3_indices[] = {MAG_R1Q, MAG_R1D, MAG_R1OFFS, MAG_S5, MAG_R2Q, MAG_R2D, MAG_R2OFFS, MAG_S3, MAG_D3, MAG_D3Q};
   int b01_u4_indices[] = {MAG_Q5, MAG_S4, MAG_Q6, MAG_S3, MAG_D2, MAG_D2Q};
   int b01_u5_indices[] = {MAG_Q3, MAG_S2, MAG_Q4, MAG_S3, MAG_D2, MAG_D2Q};
   int b01_m2_indices[] = {MAG_O1, MAG_Q1, MAG_O2, MAG_Q2, MAG_D1, MAG_D1Q, MAG_O3, MAG_S1};
@@ -87,7 +87,7 @@ void set_lattice_definitions(void) {
   int b02_m1_indices[] = {MAG_O1, MAG_Q1, MAG_O2, MAG_Q2, MAG_D1, MAG_D1Q, MAG_O3, MAG_S1};
   int b02_u1_indices[] = {MAG_Q3, MAG_S2, MAG_Q4, MAG_S3, MAG_D2, MAG_D2Q};
   int b02_u2_indices[] = {MAG_Q5, MAG_S4, MAG_Q6, MAG_S3, MAG_D2, MAG_D2Q};
-  int b02_u3_indices[] = {MAG_R1, MAG_S5, MAG_R2, MAG_S6, MAG_D3, MAG_D3Q};
+  int b02_u3_indices[] = {MAG_R1Q, MAG_R1D, MAG_R1OFFS, MAG_S5, MAG_R2Q, MAG_R2D, MAG_R2OFFS, MAG_S6, MAG_D3, MAG_D3Q};
   int b02_u4_indices[] = {MAG_Q5, MAG_S4, MAG_Q6, MAG_S3, MAG_D2, MAG_D2Q};
   int b02_u5_indices[] = {MAG_Q3, MAG_S2, MAG_Q4, MAG_S3, MAG_D2, MAG_D2Q};
   int b02_m2_indices[] = {MAG_O1, MAG_Q1, MAG_O2, MAG_Q2, MAG_D1, MAG_D1Q, MAG_O3, MAG_S1};
@@ -102,7 +102,7 @@ void set_lattice_definitions(void) {
   int b03_m1_indices[] = {MAG_O1, MAG_Q1, MAG_O2, MAG_Q2, MAG_D1, MAG_D1Q, MAG_O3, MAG_S1};
   int b03_u1_indices[] = {MAG_Q3, MAG_S2, MAG_S3, MAG_D2, MAG_D2Q};
   int b03_u2_indices[] = {MAG_Q4, MAG_S4, MAG_S3, MAG_D2, MAG_D2Q};
-  int b03_u3_indices[] = {MAG_R1, MAG_S5, MAG_S3, MAG_D3, MAG_D3Q};
+  int b03_u3_indices[] = {MAG_R1Q, MAG_R1D, MAG_R1OFFS, MAG_S5, MAG_S3, MAG_D3, MAG_D3Q};
   int b03_u4_indices[] = {MAG_Q4, MAG_S4, MAG_S3, MAG_D2, MAG_D2Q};
   int b03_u5_indices[] = {MAG_Q3, MAG_S2, MAG_S3, MAG_D2, MAG_D2Q};
   int b03_m2_indices[] = {MAG_O1, MAG_Q1, MAG_O2, MAG_Q2, MAG_D1, MAG_D1Q, MAG_O3, MAG_S1};
@@ -115,11 +115,11 @@ void set_lattice_definitions(void) {
   for (size_t i=0; i<ARRAY_LEN(b03_m2_indices); i++) global_latt_defns[LATT_B03][BLOCK_M2][b03_m2_indices[i]] = true;
 
   int c01_m1_indices[] = {MAG_O1, MAG_Q1, MAG_O2, MAG_Q2, MAG_D1, MAG_D1Q, MAG_O3, MAG_S1};
-  int c01_u1_indices[] = {MAG_R1, MAG_S2, MAG_R2, MAG_S3, MAG_D2, MAG_D2Q};
-  int c01_u2_indices[] = {MAG_R3, MAG_S4, MAG_S3, MAG_D2, MAG_D2Q};
-  int c01_u3_indices[] = {MAG_R3, MAG_S5, MAG_S3, MAG_D2, MAG_D2Q};
-  int c01_u4_indices[] = {MAG_R3, MAG_S4, MAG_S3, MAG_D2, MAG_D2Q};
-  int c01_u5_indices[] = {MAG_R1, MAG_S2, MAG_R2, MAG_S3, MAG_D2, MAG_D2Q};
+  int c01_u1_indices[] = {MAG_R1Q, MAG_R1D, MAG_R1OFFS, MAG_S2, MAG_R2Q, MAG_R2D, MAG_R2OFFS, MAG_S3, MAG_D2, MAG_D2Q};
+  int c01_u2_indices[] = {MAG_R3Q, MAG_R3D, MAG_R3OFFS, MAG_S4, MAG_S3, MAG_D2, MAG_D2Q};
+  int c01_u3_indices[] = {MAG_R3Q, MAG_R3D, MAG_R3OFFS, MAG_S5, MAG_S3, MAG_D2, MAG_D2Q};
+  int c01_u4_indices[] = {MAG_R3Q, MAG_R3D, MAG_R3OFFS, MAG_S4, MAG_S3, MAG_D2, MAG_D2Q};
+  int c01_u5_indices[] = {MAG_R1Q, MAG_R1D, MAG_R1OFFS, MAG_S2, MAG_R2Q, MAG_R2D, MAG_R2OFFS, MAG_S3, MAG_D2, MAG_D2Q};
   int c01_m2_indices[] = {MAG_O1, MAG_Q1, MAG_O2, MAG_Q2, MAG_D1, MAG_D1Q, MAG_O3, MAG_S1};
   for (size_t i=0; i<ARRAY_LEN(c01_m1_indices); i++) global_latt_defns[LATT_C01][BLOCK_M1][c01_m1_indices[i]] = true;
   for (size_t i=0; i<ARRAY_LEN(c01_u1_indices); i++) global_latt_defns[LATT_C01][BLOCK_U1][c01_u1_indices[i]] = true;
@@ -132,7 +132,7 @@ void set_lattice_definitions(void) {
   int d01_m1_indices[] = {MAG_O1, MAG_Q1, MAG_O2, MAG_Q2, MAG_D1, MAG_D1Q, MAG_O3, MAG_S1};
   int d01_u1_indices[] = {MAG_Q3, MAG_S2, MAG_S3, MAG_T1, MAG_D2, MAG_D2Q};
   int d01_u2_indices[] = {MAG_Q4, MAG_S4, MAG_S3, MAG_T1, MAG_D2, MAG_D2Q};
-  int d01_u3_indices[] = {MAG_R1, MAG_S5, MAG_S3, MAG_T2, MAG_D3, MAG_D3Q};
+  int d01_u3_indices[] = {MAG_R1Q, MAG_R1D, MAG_R1OFFS, MAG_S5, MAG_S3, MAG_T2, MAG_D3, MAG_D3Q};
   int d01_u4_indices[] = {MAG_Q4, MAG_S4, MAG_S3, MAG_T1, MAG_D2, MAG_D2Q};
   int d01_u5_indices[] = {MAG_Q3, MAG_S2, MAG_S3, MAG_T1, MAG_D2, MAG_D2Q};
   int d01_m2_indices[] = {MAG_O1, MAG_Q1, MAG_O2, MAG_Q2, MAG_D1, MAG_D1Q, MAG_O3, MAG_S1};
@@ -147,7 +147,7 @@ void set_lattice_definitions(void) {
   int e01_m1_indices[] = {MAG_O1, MAG_Q1, MAG_O2, MAG_Q2, MAG_D1, MAG_D1Q, MAG_O3, MAG_S1};
   int e01_u1_indices[] = {MAG_Q3, MAG_S2, MAG_S3, MAG_T1, MAG_D2, MAG_D2Q};
   int e01_u2_indices[] = {MAG_Q4, MAG_S4, MAG_S3, MAG_T1, MAG_D2};
-  int e01_u3_indices[] = {MAG_R1, MAG_S5, MAG_S3, MAG_T2, MAG_D3, MAG_D3Q};
+  int e01_u3_indices[] = {MAG_R1Q, MAG_R1D, MAG_R1OFFS, MAG_S5, MAG_S3, MAG_T2, MAG_D3, MAG_D3Q};
   int e01_u4_indices[] = {MAG_Q4, MAG_S4, MAG_S3, MAG_T1, MAG_D2};
   int e01_u5_indices[] = {MAG_Q3, MAG_S2, MAG_S3, MAG_T1, MAG_D2, MAG_D2Q};
   int e01_m2_indices[] = {MAG_O1, MAG_Q1, MAG_O2, MAG_Q2, MAG_D1, MAG_D1Q, MAG_O3, MAG_S1};
@@ -160,11 +160,11 @@ void set_lattice_definitions(void) {
   for (size_t i=0; i<ARRAY_LEN(e01_m2_indices); i++) global_latt_defns[LATT_E01][BLOCK_M2][e01_m2_indices[i]] = true;
 
   int f01_m1_indices[] = {MAG_O1, MAG_Q1, MAG_O2, MAG_Q2, MAG_D1, MAG_D1Q, MAG_O3, MAG_S1};
-  int f01_u1_indices[] = {MAG_Q3, MAG_S2, MAG_R1, MAG_S3, MAG_D2, MAG_D2Q};
-  int f01_u2_indices[] = {MAG_R1, MAG_S2, MAG_S3, MAG_D2, MAG_D2Q, MAG_S3};
-  int f01_u3_indices[] = {MAG_R1, MAG_S2, MAG_S3, MAG_D2, MAG_D2Q};
-  int f01_u4_indices[] = {MAG_R1, MAG_S2, MAG_S3, MAG_D2, MAG_D2Q, MAG_S3};
-  int f01_u5_indices[] = {MAG_Q3, MAG_S2, MAG_R1, MAG_S3, MAG_D2, MAG_D2Q};
+  int f01_u1_indices[] = {MAG_Q3, MAG_S2, MAG_R1Q, MAG_R1D, MAG_R1OFFS, MAG_S3, MAG_D2, MAG_D2Q};
+  int f01_u2_indices[] = {MAG_R1Q, MAG_R1D, MAG_R1OFFS, MAG_S2, MAG_S3, MAG_D2, MAG_D2Q, MAG_S3};
+  int f01_u3_indices[] = {MAG_R1Q, MAG_R1D, MAG_R1OFFS, MAG_S2, MAG_S3, MAG_D2, MAG_D2Q};
+  int f01_u4_indices[] = {MAG_R1Q, MAG_R1D, MAG_R1OFFS, MAG_S2, MAG_S3, MAG_D2, MAG_D2Q, MAG_S3};
+  int f01_u5_indices[] = {MAG_Q3, MAG_S2, MAG_R1Q, MAG_R1D, MAG_R1OFFS, MAG_S3, MAG_D2, MAG_D2Q};
   int f01_m2_indices[] = {MAG_O1, MAG_Q1, MAG_O2, MAG_Q2, MAG_D1, MAG_D1Q, MAG_O3, MAG_S1};
   for (size_t i=0; i<ARRAY_LEN(f01_m1_indices); i++) global_latt_defns[LATT_F01][BLOCK_M1][f01_m1_indices[i]] = true;
   for (size_t i=0; i<ARRAY_LEN(f01_u1_indices); i++) global_latt_defns[LATT_F01][BLOCK_U1][f01_u1_indices[i]] = true;
@@ -175,11 +175,11 @@ void set_lattice_definitions(void) {
   for (size_t i=0; i<ARRAY_LEN(f01_m2_indices); i++) global_latt_defns[LATT_F01][BLOCK_M2][f01_m2_indices[i]] = true;
 
   int f02_m1_indices[] = {MAG_O1, MAG_Q1, MAG_O2, MAG_Q2, MAG_D1, MAG_D1Q, MAG_O3, MAG_S1};
-  int f02_u1_indices[] = {MAG_Q3, MAG_S2, MAG_R1, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
-  int f02_u2_indices[] = {MAG_R1, MAG_S4, MAG_R2, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
-  int f02_u3_indices[] = {MAG_R2, MAG_S5, MAG_R3, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
-  int f02_u4_indices[] = {MAG_R1, MAG_S4, MAG_R2, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
-  int f02_u5_indices[] = {MAG_Q3, MAG_S2, MAG_R1, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
+  int f02_u1_indices[] = {MAG_Q3, MAG_S2, MAG_R1Q, MAG_R1D, MAG_R1OFFS, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
+  int f02_u2_indices[] = {MAG_R1Q, MAG_R1D, MAG_R1OFFS, MAG_S4, MAG_R2Q, MAG_R2D, MAG_R2OFFS, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
+  int f02_u3_indices[] = {MAG_R2Q, MAG_R2D, MAG_R2OFFS, MAG_S5, MAG_R3Q, MAG_R3D, MAG_R3OFFS, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
+  int f02_u4_indices[] = {MAG_R1Q, MAG_R1D, MAG_R1OFFS, MAG_S4, MAG_R2Q, MAG_R2D, MAG_R2OFFS, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
+  int f02_u5_indices[] = {MAG_Q3, MAG_S2, MAG_R1Q, MAG_R1D, MAG_R1OFFS, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
   int f02_m2_indices[] = {MAG_O1, MAG_Q1, MAG_O2, MAG_Q2, MAG_D1, MAG_D1Q, MAG_O3, MAG_S1};
   for (size_t i=0; i<ARRAY_LEN(f02_m1_indices); i++) global_latt_defns[LATT_F02][BLOCK_M1][f02_m1_indices[i]] = true;
   for (size_t i=0; i<ARRAY_LEN(f02_u1_indices); i++) global_latt_defns[LATT_F02][BLOCK_U1][f02_u1_indices[i]] = true;
@@ -190,11 +190,11 @@ void set_lattice_definitions(void) {
   for (size_t i=0; i<ARRAY_LEN(f02_m2_indices); i++) global_latt_defns[LATT_F02][BLOCK_M2][f02_m2_indices[i]] = true;
 
   int g01_m1_indices[] = {MAG_O1, MAG_Q1, MAG_O2, MAG_Q2, MAG_D1, MAG_D1Q, MAG_O3, MAG_S1_COMBINED};
-  int g01_u1_indices[] = {MAG_Q3, MAG_S2, MAG_R1, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
-  int g01_u2_indices[] = {MAG_R1, MAG_S4, MAG_R2, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
-  int g01_u3_indices[] = {MAG_R2, MAG_S5, MAG_R3, MAG_S3_COMBINED, MAG_D3, MAG_D3Q};
-  int g01_u4_indices[] = {MAG_R1, MAG_S4, MAG_R2, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
-  int g01_u5_indices[] = {MAG_Q3, MAG_S2, MAG_R1, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
+  int g01_u1_indices[] = {MAG_Q3, MAG_S2, MAG_R1Q, MAG_R1D, MAG_R1OFFS, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
+  int g01_u2_indices[] = {MAG_R1Q, MAG_R1D, MAG_R1OFFS, MAG_S4, MAG_R2Q, MAG_R2D, MAG_R2OFFS, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
+  int g01_u3_indices[] = {MAG_R2Q, MAG_R2D, MAG_R2OFFS, MAG_S5, MAG_R3Q, MAG_R3D, MAG_R3OFFS, MAG_S3_COMBINED, MAG_D3, MAG_D3Q};
+  int g01_u4_indices[] = {MAG_R1Q, MAG_R1D, MAG_R1OFFS, MAG_S4, MAG_R2Q, MAG_R2D, MAG_R2OFFS, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
+  int g01_u5_indices[] = {MAG_Q3, MAG_S2, MAG_R1Q, MAG_R1D, MAG_R1OFFS, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
   int g01_m2_indices[] = {MAG_O1, MAG_Q1, MAG_O2, MAG_Q2, MAG_D1, MAG_D1Q, MAG_O3, MAG_S1_COMBINED};
   for (size_t i=0; i<ARRAY_LEN(g01_m1_indices); i++) global_latt_defns[LATT_G01][BLOCK_M1][g01_m1_indices[i]] = true;
   for (size_t i=0; i<ARRAY_LEN(g01_u1_indices); i++) global_latt_defns[LATT_G01][BLOCK_U1][g01_u1_indices[i]] = true;
@@ -205,11 +205,11 @@ void set_lattice_definitions(void) {
   for (size_t i=0; i<ARRAY_LEN(g01_m2_indices); i++) global_latt_defns[LATT_G01][BLOCK_M2][g01_m2_indices[i]] = true;
 
   int h01_m1_indices[] = {MAG_O1, MAG_Q1, MAG_O2, MAG_Q2, MAG_D1, MAG_D1Q, MAG_O3, MAG_S1_COMBINED};
-  int h01_u1_indices[] = {MAG_R1, MAG_S2, MAG_R2, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
-  int h01_u2_indices[] = {MAG_R2, MAG_S2, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
-  int h01_u3_indices[] = {MAG_R2, MAG_S2, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
-  int h01_u4_indices[] = {MAG_R2, MAG_S2, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
-  int h01_u5_indices[] = {MAG_R1, MAG_S2, MAG_R2, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
+  int h01_u1_indices[] = {MAG_R1Q, MAG_R1D, MAG_R1OFFS, MAG_S2, MAG_R2Q, MAG_R2D, MAG_R2OFFS, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
+  int h01_u2_indices[] = {MAG_R2Q, MAG_R2D, MAG_R2OFFS, MAG_S2, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
+  int h01_u3_indices[] = {MAG_R2Q, MAG_R2D, MAG_R2OFFS, MAG_S2, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
+  int h01_u4_indices[] = {MAG_R2Q, MAG_R2D, MAG_R2OFFS, MAG_S2, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
+  int h01_u5_indices[] = {MAG_R1Q, MAG_R1D, MAG_R1OFFS, MAG_S2, MAG_R2Q, MAG_R2D, MAG_R2OFFS, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
   int h01_m2_indices[] = {MAG_O1, MAG_Q1, MAG_O2, MAG_Q2, MAG_D1, MAG_D1Q, MAG_O3, MAG_S1_COMBINED};
   for (size_t i=0; i<ARRAY_LEN(h01_m1_indices); i++) global_latt_defns[LATT_H01][BLOCK_M1][h01_m1_indices[i]] = true;
   for (size_t i=0; i<ARRAY_LEN(h01_u1_indices); i++) global_latt_defns[LATT_H01][BLOCK_U1][h01_u1_indices[i]] = true;
@@ -220,11 +220,11 @@ void set_lattice_definitions(void) {
   for (size_t i=0; i<ARRAY_LEN(h01_m2_indices); i++) global_latt_defns[LATT_H01][BLOCK_M2][h01_m2_indices[i]] = true;
 
   int h02_m1_indices[] = {MAG_O1, MAG_Q1, MAG_O2, MAG_Q2, MAG_D1, MAG_D1Q, MAG_O3, MAG_S1_COMBINED};
-  int h02_u1_indices[] = {MAG_R1, MAG_S2, MAG_R2, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
-  int h02_u2_indices[] = {MAG_R2, MAG_S4, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
-  int h02_u3_indices[] = {MAG_R2, MAG_S4, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
-  int h02_u4_indices[] = {MAG_R2, MAG_S4, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
-  int h02_u5_indices[] = {MAG_R1, MAG_S2, MAG_R2, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
+  int h02_u1_indices[] = {MAG_R1Q, MAG_R1D, MAG_R1OFFS, MAG_S2, MAG_R2Q, MAG_R2D, MAG_R2OFFS, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
+  int h02_u2_indices[] = {MAG_R2Q, MAG_R2D, MAG_R2OFFS, MAG_S4, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
+  int h02_u3_indices[] = {MAG_R2Q, MAG_R2D, MAG_R2OFFS, MAG_S4, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
+  int h02_u4_indices[] = {MAG_R2Q, MAG_R2D, MAG_R2OFFS, MAG_S4, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
+  int h02_u5_indices[] = {MAG_R1Q, MAG_R1D, MAG_R1OFFS, MAG_S2, MAG_R2Q, MAG_R2D, MAG_R2OFFS, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
   int h02_m2_indices[] = {MAG_O1, MAG_Q1, MAG_O2, MAG_Q2, MAG_D1, MAG_D1Q, MAG_O3, MAG_S1_COMBINED};
   for (size_t i=0; i<ARRAY_LEN(h02_m1_indices); i++) global_latt_defns[LATT_H02][BLOCK_M1][h02_m1_indices[i]] = true;
   for (size_t i=0; i<ARRAY_LEN(h02_u1_indices); i++) global_latt_defns[LATT_H02][BLOCK_U1][h02_u1_indices[i]] = true;
@@ -237,7 +237,7 @@ void set_lattice_definitions(void) {
   int i01_m1_indices[] = {MAG_O1, MAG_Q1, MAG_O2, MAG_Q2, MAG_D1, MAG_D1Q, MAG_O3, MAG_S1_COMBINED};
   int i01_u1_indices[] = {MAG_Q3, MAG_S2, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
   int i01_u2_indices[] = {MAG_Q4, MAG_S4, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
-  int i01_u3_indices[] = {MAG_R1, MAG_S5, MAG_S6_COMBINED, MAG_D3, MAG_D3Q};
+  int i01_u3_indices[] = {MAG_R1Q, MAG_R1D, MAG_R1OFFS, MAG_S5, MAG_S6_COMBINED, MAG_D3, MAG_D3Q};
   int i01_u4_indices[] = {MAG_Q4, MAG_S4, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
   int i01_u5_indices[] = {MAG_Q3, MAG_S2, MAG_S3_COMBINED, MAG_D2, MAG_D2Q};
   int i01_m2_indices[] = {MAG_O1, MAG_Q1, MAG_O2, MAG_Q2, MAG_D1, MAG_D1Q, MAG_O3, MAG_S1_COMBINED};
@@ -409,16 +409,28 @@ int get_fam_locs_callback(size_t row, size_t col, const char* value, void* callb
     else fam_locs->Q6_cl = col;
   }
   else if (strcmp(value, "R1")==0) {
-    if (fam_locs->R1_value == 0) fam_locs->R1_value = col;
-    else fam_locs->R1_cl = col + 1;
+    if (fam_locs->R1d_value == 0) fam_locs->R1d_value = col;
+    else fam_locs->R1d_cl = col;
+    if (fam_locs->R1q_value == 0) fam_locs->R1q_value = col + 1;
+    else fam_locs->R1q_cl = col + 1;
+    if (fam_locs->R1offs_value == 0) fam_locs->R1offs_value = col + 2;
+    else fam_locs->R1offs_cl = col + 2;
   }
   else if (strcmp(value, "R2")==0) {
-    if (fam_locs->R2_value == 0) fam_locs->R2_value = col;
-    else fam_locs->R2_cl = col + 1;
+    if (fam_locs->R2d_value == 0) fam_locs->R2d_value = col;
+    else fam_locs->R2d_cl = col;
+    if (fam_locs->R2q_value == 0) fam_locs->R2q_value = col + 1;
+    else fam_locs->R2q_cl = col + 1;
+    if (fam_locs->R2offs_value == 0) fam_locs->R2offs_value = col + 2;
+    else fam_locs->R2offs_cl = col + 2;
   }
   else if (strcmp(value, "R3")==0) {
-    if (fam_locs->R3_value == 0) fam_locs->R3_value = col;
-    else fam_locs->R3_cl = col + 1;
+    if (fam_locs->R3d_value == 0) fam_locs->R3d_value = col;
+    else fam_locs->R3d_cl = col;
+    if (fam_locs->R3q_value == 0) fam_locs->R3q_value = col + 1;
+    else fam_locs->R3q_cl = col + 1;
+    if (fam_locs->R3offs_value == 0) fam_locs->R3offs_value = col + 2;
+    else fam_locs->R3offs_cl = col + 2;
   }
   else if (strcmp(value, "S1")==0) {
     if (fam_locs->S1_value == 0) fam_locs->S1_value = col;
@@ -508,9 +520,15 @@ int get_fam_strengths_callback(size_t row, size_t col, const char* value, void* 
   else if (col == fam_defns->fam_locs.Q4_value) fam_defns->data[index_of_last].values[MAG_Q4] = strtod(value, NULL);
   else if (col == fam_defns->fam_locs.Q5_value) fam_defns->data[index_of_last].values[MAG_Q5] = strtod(value, NULL);
   else if (col == fam_defns->fam_locs.Q6_value) fam_defns->data[index_of_last].values[MAG_Q6] = strtod(value, NULL);
-  else if (col == fam_defns->fam_locs.R1_value) fam_defns->data[index_of_last].values[MAG_R1] = strtod(value, NULL);
-  else if (col == fam_defns->fam_locs.R2_value) fam_defns->data[index_of_last].values[MAG_R2] = strtod(value, NULL);
-  else if (col == fam_defns->fam_locs.R3_value) fam_defns->data[index_of_last].values[MAG_R3] = strtod(value, NULL);
+  else if (col == fam_defns->fam_locs.R1d_value) fam_defns->data[index_of_last].values[MAG_R1D] = strtod(value, NULL);
+  else if (col == fam_defns->fam_locs.R1q_value) fam_defns->data[index_of_last].values[MAG_R1Q] = strtod(value, NULL);
+  else if (col == fam_defns->fam_locs.R1offs_value) fam_defns->data[index_of_last].values[MAG_R1OFFS] = strtod(value, NULL);
+  else if (col == fam_defns->fam_locs.R2d_value) fam_defns->data[index_of_last].values[MAG_R2D] = strtod(value, NULL);
+  else if (col == fam_defns->fam_locs.R2q_value) fam_defns->data[index_of_last].values[MAG_R2Q] = strtod(value, NULL);
+  else if (col == fam_defns->fam_locs.R2offs_value) fam_defns->data[index_of_last].values[MAG_R2OFFS] = strtod(value, NULL);
+  else if (col == fam_defns->fam_locs.R3d_value) fam_defns->data[index_of_last].values[MAG_R3D] = strtod(value, NULL);
+  else if (col == fam_defns->fam_locs.R3q_value) fam_defns->data[index_of_last].values[MAG_R3Q] = strtod(value, NULL);
+  else if (col == fam_defns->fam_locs.R3offs_value) fam_defns->data[index_of_last].values[MAG_R3OFFS] = strtod(value, NULL);
   else if (col == fam_defns->fam_locs.S1_value) fam_defns->data[index_of_last].values[MAG_S1] = strtod(value, NULL);
   else if (col == fam_defns->fam_locs.S2_value) fam_defns->data[index_of_last].values[MAG_S2] = strtod(value, NULL);
   else if (col == fam_defns->fam_locs.S3_value) fam_defns->data[index_of_last].values[MAG_S3] = strtod(value, NULL);
@@ -537,9 +555,15 @@ int get_fam_strengths_callback(size_t row, size_t col, const char* value, void* 
   else if (col == fam_defns->fam_locs.Q4_cl) fam_defns->data[index_of_last].cls[MAG_Q4] = strtol(value, NULL, 10);
   else if (col == fam_defns->fam_locs.Q5_cl) fam_defns->data[index_of_last].cls[MAG_Q5] = strtol(value, NULL, 10);
   else if (col == fam_defns->fam_locs.Q6_cl) fam_defns->data[index_of_last].cls[MAG_Q6] = strtol(value, NULL, 10);
-  else if (col == fam_defns->fam_locs.R1_cl) fam_defns->data[index_of_last].cls[MAG_R1] = strtol(value, NULL, 10);
-  else if (col == fam_defns->fam_locs.R2_cl) fam_defns->data[index_of_last].cls[MAG_R2] = strtol(value, NULL, 10);
-  else if (col == fam_defns->fam_locs.R3_cl) fam_defns->data[index_of_last].cls[MAG_R3] = strtol(value, NULL, 10);
+  else if (col == fam_defns->fam_locs.R1d_cl) fam_defns->data[index_of_last].cls[MAG_R1D] = strtol(value, NULL, 10);
+  else if (col == fam_defns->fam_locs.R1q_cl) fam_defns->data[index_of_last].cls[MAG_R1Q] = strtol(value, NULL, 10);
+  else if (col == fam_defns->fam_locs.R1offs_cl) fam_defns->data[index_of_last].cls[MAG_R1OFFS] = strtol(value, NULL, 10);
+  else if (col == fam_defns->fam_locs.R2d_cl) fam_defns->data[index_of_last].cls[MAG_R2D] = strtol(value, NULL, 10);
+  else if (col == fam_defns->fam_locs.R2q_cl) fam_defns->data[index_of_last].cls[MAG_R2Q] = strtol(value, NULL, 10);
+  else if (col == fam_defns->fam_locs.R2offs_cl) fam_defns->data[index_of_last].cls[MAG_R2OFFS] = strtol(value, NULL, 10);
+  else if (col == fam_defns->fam_locs.R3d_cl) fam_defns->data[index_of_last].cls[MAG_R3D] = strtol(value, NULL, 10);
+  else if (col == fam_defns->fam_locs.R3q_cl) fam_defns->data[index_of_last].cls[MAG_R3Q] = strtol(value, NULL, 10);
+  else if (col == fam_defns->fam_locs.R3offs_cl) fam_defns->data[index_of_last].cls[MAG_R3OFFS] = strtol(value, NULL, 10);
   else if (col == fam_defns->fam_locs.S1_cl) fam_defns->data[index_of_last].cls[MAG_S1] = strtol(value, NULL, 10);
   else if (col == fam_defns->fam_locs.S2_cl) fam_defns->data[index_of_last].cls[MAG_S2] = strtol(value, NULL, 10);
   else if (col == fam_defns->fam_locs.S3_cl) fam_defns->data[index_of_last].cls[MAG_S3] = strtol(value, NULL, 10);

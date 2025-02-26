@@ -21,7 +21,7 @@
 typedef enum {
   MAG_D1=0, MAG_D1Q, MAG_D2, MAG_D2Q, MAG_D3, MAG_D3Q,
   MAG_Q1, MAG_Q2, MAG_Q3, MAG_Q4, MAG_Q5, MAG_Q6,
-  MAG_R1, MAG_R2, MAG_R3,
+  MAG_R1Q, MAG_R1D, MAG_R1OFFS, MAG_R2Q, MAG_R2D, MAG_R2OFFS, MAG_R3Q, MAG_R3D, MAG_R3OFFS,
   MAG_S1, MAG_S2, MAG_S3, MAG_S4, MAG_S5, MAG_S6,
   MAG_O1, MAG_O2, MAG_O3,
   MAG_T1, MAG_T2,
@@ -55,7 +55,7 @@ typedef struct {
   size_t D1_value, D2_value, D3_value;
   size_t D1q_value, D2q_value, D3q_value;
   size_t Q1_value, Q2_value, Q3_value, Q4_value, Q5_value, Q6_value;
-  size_t R1_value, R2_value, R3_value;
+  size_t R1q_value, R1d_value, R1offs_value, R2q_value, R2d_value, R2offs_value, R3q_value, R3d_value, R3offs_value;
   size_t S1_value, S2_value, S3_value, S4_value, S5_value, S6_value;
   size_t O1_value, O2_value, O3_value;
   size_t T1_value, T2_value;
@@ -63,7 +63,7 @@ typedef struct {
   size_t D1_cl, D2_cl, D3_cl;
   size_t D1q_cl, D2q_cl, D3q_cl;
   size_t Q1_cl, Q2_cl, Q3_cl, Q4_cl, Q5_cl, Q6_cl;
-  size_t R1_cl, R2_cl, R3_cl;
+  size_t R1q_cl, R1d_cl, R1offs_cl, R2q_cl, R2d_cl, R2offs_cl, R3q_cl, R3d_cl, R3offs_cl;
   size_t S1_cl, S2_cl, S3_cl, S4_cl, S5_cl, S6_cl;
   size_t O1_cl, O2_cl, O3_cl;
   size_t T1_cl, T2_cl;
