@@ -666,3 +666,30 @@ char* days_to_date(int days) {
     return date;
 }
 
+void print_file_summary(const char *latt_summ_filename, const FamilyDefns *fam_defns, const Info *info) {
+  printf("--------------------------------------------------------\n");
+  printf("Summary of %s\n", latt_summ_filename);
+  printf("\tVersion:       %s\n", info->version);
+  printf("\tDate:          %s\n", days_to_date(info->date));
+  printf("\tBy:            %s\n", info->by);
+  printf("\tDescription:   %s\n", info->description);
+  printf("\tLattice count: %zu\n", fam_defns->length);
+  printf("--------------------------------------------------------\n");
+}
+
+void print_block_replacement_info(bool *blocks_replaced, size_t num_blocks) {
+    printf("Blocks to replace:  ");
+    bool any_blocks_replaced = any_true(blocks_replaced, num_blocks);
+    for (size_t block_ind=0; block_ind<num_blocks; block_ind++)
+      if (blocks_replaced[block_ind]) printf("%s, ", block_type_string(block_ind));
+    if (!any_blocks_replaced) printf("-  ");
+}
+
+Info create_info_struct(void) {
+  Info info = {0};
+  info.version     = SDM_MALLOC(DEFAULT_INFO_BUFF_LEN);
+  info.by          = SDM_MALLOC(DEFAULT_INFO_BUFF_LEN);
+  info.description = SDM_MALLOC(DEFAULT_INFO_BUFF_LEN);
+  return info;
+}
+

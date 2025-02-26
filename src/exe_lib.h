@@ -132,6 +132,9 @@ const char *block_type_string(BlockType t);
 bool any_true(bool *array, size_t len);
 bool replace_due_to_mag(int cl);
 LatticeType get_lattice_type_from_name(const char *name);
+void print_file_summary(const char *latt_summ_filename, const FamilyDefns *fam_defns, const Info *info);
+void print_block_replacement_info(bool *blocks_replaced, size_t num_blocks);
+Info create_info_struct(void);
 
 void concat_strings(const char *str1, const char *str2, char *buffer, size_t buff_len);
 bool ends_with(const char *str, const char *suffix);

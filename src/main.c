@@ -29,40 +29,23 @@ int main(void) {
 
   // Get data from lattice summary spreadsheet
   FamilyDefns fam_defns = {0};
-  Info info = {0};
-  info.version = SDM_MALLOC(DEFAULT_INFO_BUFF_LEN);
-  info.by = SDM_MALLOC(DEFAULT_INFO_BUFF_LEN);
-  info.description = SDM_MALLOC(DEFAULT_INFO_BUFF_LEN);
+  Info info = create_info_struct();
   if (get_lattice_summaries(latt_summ_filename, &fam_defns, &info) < 0)
     REPORT_AND_DIE("Error opening .xlsx file: %s\n", latt_summ_filename);
 
-  printf("--------------------------------------------------------\n");
-  printf("Info for %s\n", latt_summ_filename);
-  printf("\tVersion:       %s\n", info.version);
-  printf("\tDate:          %s\n", days_to_date(info.date));
-  printf("\tBy:            %s\n", info.by);
-  printf("\tDescription:   %s\n", info.description);
-  printf("\tLattice count: %zu\n", fam_defns.length);
-  printf("--------------------------------------------------------\n");
-
+  print_file_summary(latt_summ_filename, &fam_defns, &info);
   for (size_t i=0; i<fam_defns.length; i++) {
     FamilyDefn fam = fam_defns.data[i];
     if (!fam.HW_check) continue;
-    printf("%s :: ", fam.name);
 
     bool blocks_replaced[BLOCK_COUNT] = {false};
     if (!get_blocks_replaced(fam, blocks_replaced, BLOCK_COUNT)) continue;
 
-    bool any_blocks_replaced = any_true(blocks_replaced, BLOCK_COUNT);
-
-    printf("Blocks to replace:  ");
     double cost = total_block_replacement_costs(blocks_replaced, block_costs, BLOCK_COUNT);
-    for (size_t block_ind=0; block_ind<BLOCK_COUNT; block_ind++)
-      if (blocks_replaced[block_ind]) printf("%s, ", block_type_string(block_ind));
-    if (!any_blocks_replaced) printf("-  ");
-    printf("TOTAL COST = %0.1f M.SEK  ", NUM_ACHROMATS * cost/1e6);
 
-    printf("\n");
+    printf("%s :: ", fam.name);
+    print_block_replacement_info(blocks_replaced, BLOCK_COUNT);
+    printf("TOTAL COST = %0.1f M.SEK\n", NUM_ACHROMATS * cost/1e6);
   }
 
 dealloc_and_return:
