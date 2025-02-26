@@ -317,10 +317,20 @@ int get_lattice_summaries(const char *latt_summ_filename, FamilyDefns *fam_defns
     return -1;
 
   const char *datasheet_name = "Summaries";
+  const char *infosheet_name = "Info";
+
   xlsxioread_process(xlsxioread, datasheet_name, XLSXIOREAD_SKIP_NONE, &get_fam_locs_callback, &row_callback, &(fam_defns->fam_locs));
   xlsxioread_process(xlsxioread, datasheet_name, XLSXIOREAD_SKIP_NONE, &get_fam_strengths_callback, &row_callback, fam_defns);
 
-  const char *infosheet_name = "Info";
+  size_t count = 0;
+  for (size_t i=0; i<fam_defns->length; i++) {
+    if (fam_defns->data[i].HW_check) {
+      SDM_ARRAY_SWAP((*fam_defns), i, count);
+      count++;
+    }
+  }
+  fam_defns->length = count;
+
   xlsxioread_process(xlsxioread, infosheet_name, XLSXIOREAD_SKIP_NONE, &get_info_details_callback, &row_callback, info);
   xlsxioread_close(xlsxioread);
 

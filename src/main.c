@@ -36,7 +36,6 @@ int main(void) {
   print_file_summary(latt_summ_filename, &fam_defns, &info);
   for (size_t i=0; i<fam_defns.length; i++) {
     FamilyDefn fam = fam_defns.data[i];
-    if (!fam.HW_check) continue;
 
     bool blocks_replaced[BLOCK_COUNT] = {false};
     if (!get_blocks_replaced(fam, blocks_replaced, BLOCK_COUNT)) continue;

@@ -109,10 +109,12 @@ void *active_realloc(void *ptr, size_t size);
 do {                                                                     \
   assert((int)ind1 < (int)da.length && "First index is out of bounds");  \
   assert((int)ind2 < (int)da.length && "Second index is out of bounds"); \
-  SDM_ARRAY_PUSH(da, da.data[ind1]);                                     \
-  da.data[ind1] = da.data[ind2];                                         \
-  da.data[ind2] = da.data[da.length - 1];                                \
-  da.length--;                                                           \
+  if (ind1 != ind2) {                                                    \
+    SDM_ARRAY_PUSH(da, da.data[ind1]);                                   \
+    da.data[ind1] = da.data[ind2];                                       \
+    da.data[ind2] = da.data[da.length - 1];                              \
+    da.length--;                                                         \
+  }                                                                      \
 } while (0)
 
 #define SDM_ARRAY_FREE(da) do {                                \
