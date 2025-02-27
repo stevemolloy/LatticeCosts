@@ -25,7 +25,7 @@ typedef enum {
   MAG_S1, MAG_S2, MAG_S3, MAG_S4, MAG_S5, MAG_S6,
   MAG_O1, MAG_O2, MAG_O3,
   MAG_T1, MAG_T2,
-  MAG_S1_COMBINED, MAG_S3_COMBINED, MAG_S6_COMBINED,
+  MAG_S1_COMBINEDS, MAG_S1_COMBINEDQ, MAG_S3_COMBINEDS, MAG_S3_COMBINEDQ, MAG_S6_COMBINEDS, MAG_S6_COMBINEDQ,
   MAG_COUNT
 } MagType;
 
@@ -59,7 +59,7 @@ typedef struct {
   size_t S1_value, S2_value, S3_value, S4_value, S5_value, S6_value;
   size_t O1_value, O2_value, O3_value;
   size_t T1_value, T2_value;
-  size_t S1_combined_value, S3_combined_value, S6_combined_value;
+  size_t S1_combineds_value, S1_combinedq_value, S3_combineds_value, S3_combinedq_value, S6_combineds_value, S6_combinedq_value;
   size_t D1_cl, D2_cl, D3_cl;
   size_t D1q_cl, D2q_cl, D3q_cl;
   size_t Q1_cl, Q2_cl, Q3_cl, Q4_cl, Q5_cl, Q6_cl;
@@ -67,7 +67,7 @@ typedef struct {
   size_t S1_cl, S2_cl, S3_cl, S4_cl, S5_cl, S6_cl;
   size_t O1_cl, O2_cl, O3_cl;
   size_t T1_cl, T2_cl;
-  size_t S1_combined_cl, S3_combined_cl, S6_combined_cl;
+  size_t S1_combineds_cl, S1_combinedq_cl, S3_combineds_cl, S3_combinedq_cl, S6_combineds_cl, S6_combinedq_cl;
   size_t HW_check;
 } FamilyLocations;
 
