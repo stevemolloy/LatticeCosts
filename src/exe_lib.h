@@ -116,12 +116,18 @@ typedef struct {
   MagLimitsArray *data;
 } MagLimitsArrayArray;
 
+typedef enum {
+  BLK_WORK_NONE = 0,
+  BLK_WORK_MOD,
+  BLK_WORK_REPLACE,
+} BlockWork;
+
 void set_lattice_definitions(void);
 void set_block_masses(void);
 void set_block_build_costs(void);
 void set_block_costs(void);
-bool get_blocks_replaced(FamilyDefn fam, bool *blocks_replaced_array, size_t num_blocks);
-double total_block_replacement_costs(bool *blocks_replaced, double *costs, size_t block_count);
+bool get_blocks_work_details(FamilyDefn fam, BlockWork *blocks_replaced_array, size_t num_blocks);
+double total_block_work_costs(FamilyDefn fam, BlockWork *block_work, double *costs, size_t block_count);
 int print_sheet_name(const char *name, void *callbackdata);
 int get_lattice_summaries(const char *latt_summ_filename, FamilyDefns *fam_defns, Info *info);
 int get_fam_locs_callback(size_t row, size_t col, const char* value, void* callbackdata);
@@ -129,11 +135,12 @@ int row_callback(size_t row, size_t maxcol, void* callbackdata);
 int get_fam_strengths_callback(size_t row, size_t col, const char* value, void* callbackdata);
 int get_info_details_callback(size_t row, size_t col, const char* value, void* callbackdata);
 const char *block_type_string(BlockType t);
-bool any_true(bool *array, size_t len);
-bool replace_due_to_mag(int cl);
+bool any_equal_to(BlockWork *array, size_t len, BlockWork needle);
+BlockWork work_due_to_mag(int cl);
 LatticeType get_lattice_type_from_name(const char *name);
 void print_file_summary(const char *latt_summ_filename, const FamilyDefns *fam_defns, const Info *info);
-void print_block_replacement_info(bool *blocks_replaced, size_t num_blocks);
+void print_block_replacement_info(BlockWork *blocks_replaced, size_t num_blocks);
+void print_block_modification_info(BlockWork *blocks_replaced, size_t num_blocks);
 Info create_info_struct(void);
 
 void concat_strings(const char *str1, const char *str2, char *buffer, size_t buff_len);

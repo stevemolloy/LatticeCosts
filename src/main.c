@@ -37,13 +37,14 @@ int main(void) {
   for (size_t i=0; i<fam_defns.length; i++) {
     FamilyDefn fam = fam_defns.data[i];
 
-    bool blocks_replaced[BLOCK_COUNT] = {false};
-    if (!get_blocks_replaced(fam, blocks_replaced, BLOCK_COUNT)) continue;
+    BlockWork block_work_details[BLOCK_COUNT] = {BLK_WORK_NONE};
+    if (!get_blocks_work_details(fam, block_work_details, BLOCK_COUNT)) continue;
 
-    double cost = total_block_replacement_costs(blocks_replaced, block_costs, BLOCK_COUNT);
+    double cost = total_block_work_costs(fam, block_work_details, block_costs, BLOCK_COUNT);
 
     printf("%s :: ", fam.name);
-    print_block_replacement_info(blocks_replaced, BLOCK_COUNT);
+    print_block_replacement_info(block_work_details, BLOCK_COUNT);
+    print_block_modification_info(block_work_details, BLOCK_COUNT);
     printf("TOTAL COST = %0.1f M.SEK\n", NUM_ACHROMATS * cost/1e6);
   }
 

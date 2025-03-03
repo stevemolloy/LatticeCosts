@@ -12,6 +12,7 @@ extern double block_mass[BLOCK_COUNT];
 extern double block_costs[BLOCK_COUNT];
 extern double EUR_PER_METRICTONNE_STEEL;
 double EUR2SEK;
+double POLECOST;
 
 void set_block_costs(void) {
   set_block_build_costs();
@@ -250,7 +251,7 @@ void set_lattice_definitions(void) {
   for (size_t i=0; i<ARRAY_LEN(i01_m2_indices); i++) global_latt_defns[LATT_I01][BLOCK_M2][i01_m2_indices[i]] = true;
 }
 
-bool get_blocks_replaced(FamilyDefn fam, bool *blocks_replaced_array, size_t num_blocks) {
+bool get_blocks_work_details(FamilyDefn fam, BlockWork *blocks_replaced_array, size_t num_blocks) {
   LatticeType lat_type = get_lattice_type_from_name(fam.name);
   if (lat_type == LATT_UNKNOWN) {
     printf("WARNING: Layout of \"%s\" is unknown.\n", fam.name);
@@ -259,29 +260,116 @@ bool get_blocks_replaced(FamilyDefn fam, bool *blocks_replaced_array, size_t num
 
   for (size_t block_ind=0; block_ind<num_blocks; block_ind++) {
     for (size_t mag_ind=0; mag_ind<MAG_COUNT; mag_ind++) {
-      if (global_latt_defns[lat_type][block_ind][mag_ind] && replace_due_to_mag(fam.cls[mag_ind])) {
-        blocks_replaced_array[block_ind] = true;
-        break;
+      if (global_latt_defns[lat_type][block_ind][mag_ind]) {
+        BlockWork work_to_do = work_due_to_mag(fam.cls[mag_ind]);
+        if (work_to_do == BLK_WORK_REPLACE) {
+          blocks_replaced_array[block_ind] = BLK_WORK_REPLACE;
+          break;
+        } else if (work_to_do == BLK_WORK_MOD) {
+          blocks_replaced_array[block_ind] = BLK_WORK_MOD;
+        }
       }
     }
   }
   return true;
 }
 
-bool any_true(bool *array, size_t len) {
+bool any_equal_to(BlockWork *array, size_t len, BlockWork needle) {
   for (size_t i=0; i<len; i++)
-    if (array[i]) return true;
+    if (array[i] == needle) return true;
   return false;
 }
 
-bool replace_due_to_mag(int cl) {
-  return cl >= 10;
+BlockWork work_due_to_mag(int cl) {
+  if (cl >= 10) return BLK_WORK_REPLACE;
+  if (cl >= 3) return BLK_WORK_MOD;
+  if (cl >= 0) return BLK_WORK_NONE;
+  fprintf(stderr, "ERROR: Challenge level of %d does not make sense\n", cl);
+  exit(1);
 }
 
-double total_block_replacement_costs(bool *blocks_replaced, double *costs, size_t block_count) {
+double total_block_work_costs(FamilyDefn fam, BlockWork *block_work, double *costs, size_t block_count) {
+  LatticeType lat_type = get_lattice_type_from_name(fam.name);
+  if (lat_type == LATT_UNKNOWN) {
+    printf("WARNING: Layout of \"%s\" is unknown.\n", fam.name);
+    return false;
+  }
+
   double cost = 0;
-  for (size_t block_ind=0; block_ind<block_count; block_ind++)
-    if (blocks_replaced[block_ind]) cost += costs[block_ind];
+  for (size_t block_ind=0; block_ind<block_count; block_ind++) {
+    if (block_work[block_ind] == BLK_WORK_REPLACE)
+      cost += costs[block_ind];
+    if (block_work[block_ind] == BLK_WORK_MOD) {
+      bool R1added=false, R2added=false, R3added=false;
+      bool S1combadded=false, S3combadded=false, S6combadded=false;
+      for (size_t mag_ind=0; mag_ind<MAG_COUNT; mag_ind++) {
+        if (!global_latt_defns[lat_type][block_ind][mag_ind]) continue;
+        BlockWork work_needed = work_due_to_mag(fam.cls[mag_ind]);
+        if (work_needed == BLK_WORK_REPLACE) {
+          fprintf(stderr, "ERROR: This is a bug. BLK_WORK_REPLACE is not possible here.\n");
+          exit(1);
+        } else if (work_needed == BLK_WORK_NONE) continue;
+        switch ((MagType)mag_ind) {
+          case MAG_D1: case MAG_D1Q: case MAG_D2: case MAG_D2Q: case MAG_D3: case MAG_D3Q: {
+            fprintf(stderr, "ERROR: This is a bug. Dipoles should not be possible here.\n");
+            exit(1);
+          } break;
+          case MAG_Q1: case MAG_Q2: case MAG_Q3: case MAG_Q4: case MAG_Q5: case MAG_Q6: {
+            cost += 4 * POLECOST;
+            break;
+          }
+          case MAG_R1Q: case MAG_R1D: case MAG_R1OFFS: {
+            if (R1added) break;
+            R1added = true;
+            cost += 4 * POLECOST;
+            break;
+          }
+					case MAG_R2Q: case MAG_R2D: case MAG_R2OFFS: {
+            if (R2added) break;
+            R2added = true;
+            cost += 4 * POLECOST;
+            break;
+          }
+					case MAG_R3Q: case MAG_R3D: case MAG_R3OFFS: {
+            if (R3added) break;
+            R3added = true;
+            cost += 4 * POLECOST;
+            break;
+          }
+          case MAG_S1: case MAG_S2: case MAG_S3: case MAG_S4: case MAG_S5: case MAG_S6: {
+            cost += 6 * POLECOST;
+            break;
+          }
+          case MAG_O1: case MAG_O2: case MAG_O3: {
+            cost += 8 * POLECOST;
+            break;
+          }
+          case MAG_T1: case MAG_T2: case MAG_S1_COMBINEDS: case MAG_S1_COMBINEDQ: {
+            if (S1combadded) break;
+            S1combadded = true;
+            cost += 6 * POLECOST;
+            break;
+          }
+					case MAG_S3_COMBINEDS: case MAG_S3_COMBINEDQ: {
+            if (S3combadded) break;
+            S3combadded = true;
+            cost += 6 * POLECOST;
+            break;
+          }
+					case MAG_S6_COMBINEDS: case MAG_S6_COMBINEDQ: {
+            if (S6combadded) break;
+            S6combadded = true;
+            cost += 6 * POLECOST;
+            break;
+          }
+          case MAG_COUNT: {
+            fprintf(stderr, "ERROR: This is a bug. MAG_COUNT should be unreachable.\n");
+            exit(1);
+          }
+        }
+      }
+    }
+  }
   return cost;
 }
 
@@ -699,12 +787,20 @@ void print_file_summary(const char *latt_summ_filename, const FamilyDefns *fam_d
   printf("--------------------------------------------------------\n");
 }
 
-void print_block_replacement_info(bool *blocks_replaced, size_t num_blocks) {
-    printf("Blocks to replace:  ");
-    bool any_blocks_replaced = any_true(blocks_replaced, num_blocks);
+void print_block_replacement_info(BlockWork *blocks_replaced, size_t num_blocks) {
+    printf("Replace:  ");
+    bool any_blocks_replaced = any_equal_to(blocks_replaced, num_blocks, BLK_WORK_REPLACE);
     for (size_t block_ind=0; block_ind<num_blocks; block_ind++)
-      if (blocks_replaced[block_ind]) printf("%s, ", block_type_string(block_ind));
+      if (blocks_replaced[block_ind] == BLK_WORK_REPLACE) printf("%s, ", block_type_string(block_ind));
     if (!any_blocks_replaced) printf("-  ");
+}
+
+void print_block_modification_info(BlockWork *blocks_replaced, size_t num_blocks) {
+    printf("Modify:  ");
+    bool any_blocks_modified = any_equal_to(blocks_replaced, num_blocks, BLK_WORK_MOD);
+    for (size_t block_ind=0; block_ind<num_blocks; block_ind++)
+      if (blocks_replaced[block_ind] == BLK_WORK_MOD) printf("%s, ", block_type_string(block_ind));
+    if (!any_blocks_modified) printf("-  ");
 }
 
 Info create_info_struct(void) {
