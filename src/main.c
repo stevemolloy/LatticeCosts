@@ -5,8 +5,6 @@
 #define SDM_LIB_IMPLEMENTATION
 #include "sdm_lib.h"
 
-#define NUM_ACHROMATS 20
-
 double block_costs[BLOCK_COUNT] = {0};
 double block_mass[BLOCK_COUNT] = {0};
 double EUR_PER_METRICTONNE_STEEL;

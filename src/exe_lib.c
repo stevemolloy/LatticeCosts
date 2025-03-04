@@ -787,6 +787,13 @@ void print_file_summary(const char *latt_summ_filename, const FamilyDefns *fam_d
   printf("--------------------------------------------------------\n");
 }
 
+void print_lattice_details(const char *lattice_name, double cost, BlockWork *block_work_details, size_t num_blocks) {
+  printf("%s :: ", lattice_name);
+  print_block_replacement_info(block_work_details, num_blocks);
+  print_block_modification_info(block_work_details, num_blocks);
+  printf("TOTAL COST = %0.1f M.SEK\n", NUM_ACHROMATS * cost/1e6);
+}
+
 void print_block_replacement_info(BlockWork *blocks_replaced, size_t num_blocks) {
     printf("Replace:  ");
     bool any_blocks_replaced = any_equal_to(blocks_replaced, num_blocks, BLK_WORK_REPLACE);
