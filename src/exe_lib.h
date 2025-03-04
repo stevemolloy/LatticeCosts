@@ -124,12 +124,39 @@ typedef enum {
   BLK_WORK_REPLACE,
 } BlockWork;
 
+typedef enum {
+  COOLING_K25PUMPS,
+  COOLING_K9PUMPS,
+  COOLING_BLK_DIST,
+  COOLING_MANIFOLD,
+  COOLING_PRESSURE_REG,
+  COOLING_LARGE_HEATX,
+  COOLING_COUNT,
+} CoolingWork;
+
+typedef enum {
+  COSTTYPE_INDEPENDENT,
+  COSTTYPE_PERACHRO,
+  COSTTYPE_PERBLK,
+  COSTTYPE_PERACHRO_IF_CHNGD,
+  COSTTYPE_PERBLK_IF_CHNGD,
+  COSTTYPE_COUNT,
+} CostType;
+
+typedef struct {
+  size_t capacity;
+  size_t length;
+  double **data;
+} Costs;
+
 void set_lattice_definitions(void);
 void set_block_masses(void);
 void set_block_build_costs(void);
 void set_block_costs(void);
+void set_cooling_costs(void);
 bool get_blocks_work_details(FamilyDefn fam, BlockWork *blocks_replaced_array, size_t num_blocks);
 double total_block_work_costs(FamilyDefn fam, BlockWork *block_work, double *costs, size_t block_count);
+double total_cooling_work_costs(BlockWork *block_work, double *costs, CostType *cost_types, size_t costs_length);
 int print_sheet_name(const char *name, void *callbackdata);
 int get_lattice_summaries(const char *latt_summ_filename, FamilyDefns *fam_defns, Info *info);
 int get_fam_locs_callback(size_t row, size_t col, const char* value, void* callbackdata);
@@ -141,7 +168,7 @@ bool any_equal_to(BlockWork *array, size_t len, BlockWork needle);
 BlockWork work_due_to_mag(int cl);
 LatticeType get_lattice_type_from_name(const char *name);
 void print_file_summary(const char *latt_summ_filename, const FamilyDefns *fam_defns, const Info *info);
-void print_lattice_details(const char *lattice_name, double cost, BlockWork *block_work_details, size_t num_blocks);
+void print_lattice_details(const char *lattice_name, double block_work_cost, double cooling_work_cost, BlockWork *block_work_details, size_t num_blocks);
 void print_header(void);
 void print_block_work_info(BlockWork *blocks_replaced, size_t num_blocks);
 void print_block_replacement_info(BlockWork *blocks_replaced, size_t num_blocks);

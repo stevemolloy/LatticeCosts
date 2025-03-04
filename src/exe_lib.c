@@ -288,6 +288,41 @@ BlockWork work_due_to_mag(int cl) {
   exit(1);
 }
 
+double total_cooling_work_costs(BlockWork *block_work, double *costs, CostType *cost_types, size_t costs_length) {
+  double cost = 0;
+  for (size_t cost_ind=0; cost_ind<costs_length; cost_ind++) {
+    switch (cost_types[cost_ind]) {
+      case COSTTYPE_INDEPENDENT: {
+        cost += costs[cost_ind];
+      } break;
+      case COSTTYPE_PERACHRO: {
+        cost += costs[cost_ind] * NUM_ACHROMATS;
+      } break;
+      case COSTTYPE_PERBLK: {
+        cost += costs[cost_ind] * BLOCK_COUNT * NUM_ACHROMATS;
+      } break;
+      case COSTTYPE_PERACHRO_IF_CHNGD: {
+        if (any_equal_to(block_work, BLOCK_COUNT, BLK_WORK_REPLACE)) {
+          cost += costs[cost_ind];
+        }
+      } break;
+      case COSTTYPE_PERBLK_IF_CHNGD: {
+        for (size_t blk_ind=0; blk_ind<BLOCK_COUNT; blk_ind++) {
+          if (block_work[blk_ind] == BLK_WORK_REPLACE) {
+            cost += costs[cost_ind];
+          }
+        }
+      } break;
+      case COSTTYPE_COUNT: {
+        fprintf(stderr, "ERROR: This case should be unreachable\n");
+        exit(1);
+      }
+    }
+  }
+
+  return cost;
+}
+
 double total_block_work_costs(FamilyDefn fam, BlockWork *block_work, double *costs, size_t block_count) {
   LatticeType lat_type = get_lattice_type_from_name(fam.name);
   if (lat_type == LATT_UNKNOWN) {
@@ -794,16 +829,24 @@ void print_header(void) {
     printf("%s", block_type_string(i));
   }
   printf(", ");
-  printf("Cost (M.SEK)");
+  printf("Block Cost (k.SEK)");
+  printf(", ");
+  printf("Cooling Cost (k.SEK)");
+  printf(", ");
+  printf("TOTAL COST (M.SEK)");
   printf("\n");
 }
 
-void print_lattice_details(const char *lattice_name, double cost, BlockWork *block_work_details, size_t num_blocks) {
+void print_lattice_details(const char *lattice_name, double block_work_cost, double cooling_work_cost, BlockWork *block_work_details, size_t num_blocks) {
   printf("%s", lattice_name);
   printf(", ");
   print_block_work_info(block_work_details, num_blocks);
   printf(", ");
-  printf("%0.1f", NUM_ACHROMATS * cost/1e6);
+  printf("%0.1f", NUM_ACHROMATS * block_work_cost/1e3);
+  printf(", ");
+  printf("%0.1f", NUM_ACHROMATS * cooling_work_cost/1e3);
+  printf(", ");
+  printf("%0.1f", NUM_ACHROMATS * (block_work_cost + cooling_work_cost)/1e6);
   printf("\n");
 }
 
@@ -812,7 +855,7 @@ void print_block_work_info(BlockWork *blocks_replaced, size_t num_blocks) {
     if (block_ind != 0) printf(", ");
     if (blocks_replaced[block_ind] == BLK_WORK_REPLACE)  printf("R");
     else if (blocks_replaced[block_ind] == BLK_WORK_MOD) printf("M");
-    else printf(" ");
+    else printf("-");
   }
 }
 
