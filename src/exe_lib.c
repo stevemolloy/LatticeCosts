@@ -475,8 +475,11 @@ int get_info_details_callback(size_t row, size_t col, const char* value, void* c
     memset(info->by, 0, DEFAULT_INFO_BUFF_LEN);
     memcpy(info->by, value, sz > DEFAULT_INFO_BUFF_LEN ? DEFAULT_INFO_BUFF_LEN : sz);
   } else if (col == 5) {
+    sz = sz > DEFAULT_INFO_BUFF_LEN ? DEFAULT_INFO_BUFF_LEN : sz;
     memset(info->description, 0, DEFAULT_INFO_BUFF_LEN);
-    memcpy(info->description, value, sz > DEFAULT_INFO_BUFF_LEN ? DEFAULT_INFO_BUFF_LEN : sz);
+    memcpy(info->description, value, sz);
+    for (size_t i=0; i<sz; i++)
+      if (info->description[i] == ',') info->description[i] = ' ';
   }
 
   return 0;
@@ -817,7 +820,7 @@ void print_file_summary(const char *latt_summ_filename, const FamilyDefns *fam_d
   printf("\tVersion:       %s\n", info->version);
   printf("\tDate:          %s\n", days_to_date(info->date));
   printf("\tBy:            %s\n", info->by);
-  printf("\tDescription:   %s\n", info->description);
+  printf("\tDescription:   \"%s\"\n", info->description);
   printf("\tLattice count: %zu\n", fam_defns->length);
   printf("--------------------------------------------------------\n");
 }
