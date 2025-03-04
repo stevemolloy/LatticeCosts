@@ -142,6 +142,8 @@ BlockWork work_due_to_mag(int cl);
 LatticeType get_lattice_type_from_name(const char *name);
 void print_file_summary(const char *latt_summ_filename, const FamilyDefns *fam_defns, const Info *info);
 void print_lattice_details(const char *lattice_name, double cost, BlockWork *block_work_details, size_t num_blocks);
+void print_header(void);
+void print_block_work_info(BlockWork *blocks_replaced, size_t num_blocks);
 void print_block_replacement_info(BlockWork *blocks_replaced, size_t num_blocks);
 void print_block_modification_info(BlockWork *blocks_replaced, size_t num_blocks);
 Info create_info_struct(void);

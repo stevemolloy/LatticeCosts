@@ -787,11 +787,33 @@ void print_file_summary(const char *latt_summ_filename, const FamilyDefns *fam_d
   printf("--------------------------------------------------------\n");
 }
 
+void print_header(void) {
+  printf("Lattice name, ");
+  for (size_t i=0; i<BLOCK_COUNT; i++) {
+    if (i != 0) printf(", ");
+    printf("%s", block_type_string(i));
+  }
+  printf(", ");
+  printf("Cost (M.SEK)");
+  printf("\n");
+}
+
 void print_lattice_details(const char *lattice_name, double cost, BlockWork *block_work_details, size_t num_blocks) {
-  printf("%s :: ", lattice_name);
-  print_block_replacement_info(block_work_details, num_blocks);
-  print_block_modification_info(block_work_details, num_blocks);
-  printf("TOTAL COST = %0.1f M.SEK\n", NUM_ACHROMATS * cost/1e6);
+  printf("%s", lattice_name);
+  printf(", ");
+  print_block_work_info(block_work_details, num_blocks);
+  printf(", ");
+  printf("%0.1f", NUM_ACHROMATS * cost/1e6);
+  printf("\n");
+}
+
+void print_block_work_info(BlockWork *blocks_replaced, size_t num_blocks) {
+  for (size_t block_ind=0; block_ind<num_blocks; block_ind++) {
+    if (block_ind != 0) printf(", ");
+    if (blocks_replaced[block_ind] == BLK_WORK_REPLACE)  printf("R");
+    else if (blocks_replaced[block_ind] == BLK_WORK_MOD) printf("M");
+    else printf(" ");
+  }
 }
 
 void print_block_replacement_info(BlockWork *blocks_replaced, size_t num_blocks) {
