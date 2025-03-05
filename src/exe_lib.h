@@ -5,6 +5,9 @@
 #include <stdlib.h>
 
 #define NUM_ACHROMATS 20
+#define NUM_K25PUMPS 6
+#define NUM_K9PUMPS 4
+#define NUM_PRESSURE_REGS 2
 
 #define ARRAY_LEN(arr) sizeof((arr)) / sizeof((arr)[0])
 

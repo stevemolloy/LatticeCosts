@@ -296,10 +296,10 @@ double total_cooling_work_costs(BlockWork *block_work, double *costs, CostType *
         cost += costs[cost_ind];
       } break;
       case COSTTYPE_PERACHRO: {
-        cost += costs[cost_ind] * NUM_ACHROMATS;
+        cost += costs[cost_ind];
       } break;
       case COSTTYPE_PERBLK: {
-        cost += costs[cost_ind] * BLOCK_COUNT * NUM_ACHROMATS;
+        cost += costs[cost_ind] * BLOCK_COUNT;
       } break;
       case COSTTYPE_PERACHRO_IF_CHNGD: {
         if (any_equal_to(block_work, BLOCK_COUNT, BLK_WORK_REPLACE)) {
@@ -461,21 +461,21 @@ int get_lattice_summaries(const char *latt_summ_filename, FamilyDefns *fam_defns
 }
 
 int get_info_details_callback(size_t row, size_t col, const char* value, void* callbackdata) {
+  (void)row;
   if (value == NULL) return 0;
   Info *info = (Info*)callbackdata;
-  (void)row;
 
   size_t sz = strlen(value);
+  sz = sz > DEFAULT_INFO_BUFF_LEN ? DEFAULT_INFO_BUFF_LEN : sz;
   if (col == 2) {
     info->date = strtol(value, NULL, 10);
   } else if (col == 3) {
     memset(info->version, 0, DEFAULT_INFO_BUFF_LEN);
-    memcpy(info->version, value, sz > DEFAULT_INFO_BUFF_LEN ? DEFAULT_INFO_BUFF_LEN : sz);
+    memcpy(info->version, value, sz);
   } else if (col == 4) {
     memset(info->by, 0, DEFAULT_INFO_BUFF_LEN);
-    memcpy(info->by, value, sz > DEFAULT_INFO_BUFF_LEN ? DEFAULT_INFO_BUFF_LEN : sz);
+    memcpy(info->by, value, sz);
   } else if (col == 5) {
-    sz = sz > DEFAULT_INFO_BUFF_LEN ? DEFAULT_INFO_BUFF_LEN : sz;
     memset(info->description, 0, DEFAULT_INFO_BUFF_LEN);
     memcpy(info->description, value, sz);
     for (size_t i=0; i<sz; i++)
