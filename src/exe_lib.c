@@ -814,68 +814,68 @@ char* days_to_date(int days) {
     return date;
 }
 
-void print_file_summary(const char *latt_summ_filename, const FamilyDefns *fam_defns, const Info *info) {
-  printf("--------------------------------------------------------\n");
-  printf("Summary of %s\n", latt_summ_filename);
-  printf("\tVersion:       %s\n", info->version);
-  printf("\tDate:          %s\n", days_to_date(info->date));
-  printf("\tBy:            %s\n", info->by);
-  printf("\tDescription:   \"%s\"\n", info->description);
-  printf("\tLattice count: %zu\n", fam_defns->length);
-  printf("--------------------------------------------------------\n");
+void print_file_summary(FILE *sink, const char *latt_summ_filename, const FamilyDefns *fam_defns, const Info *info) {
+  fprintf(sink, "--------------------------------------------------------\n");
+  fprintf(sink, "Summary of %s\n", latt_summ_filename);
+  fprintf(sink, "\tVersion:       %s\n", info->version);
+  fprintf(sink, "\tDate:          %s\n", days_to_date(info->date));
+  fprintf(sink, "\tBy:            %s\n", info->by);
+  fprintf(sink, "\tDescription:   \"%s\"\n", info->description);
+  fprintf(sink, "\tLattice count: %zu\n", fam_defns->length);
+  fprintf(sink, "--------------------------------------------------------\n");
 }
 
-void print_header(void) {
-  printf("Lattice name, ");
+void print_header(FILE *sink) {
+  fprintf(sink, "Lattice name, ");
   for (size_t i=0; i<BLOCK_COUNT; i++) {
-    if (i != 0) printf(", ");
-    printf("%s", block_type_string(i));
+    if (i != 0) fprintf(sink, ", ");
+    fprintf(sink, "%s", block_type_string(i));
   }
-  printf(", ");
-  printf("Block Cost (k.SEK)");
-  printf(", ");
-  printf("Cooling Cost (k.SEK)");
-  printf(", ");
-  printf("TOTAL COST (M.SEK)");
-  printf("\n");
+  fprintf(sink, ", ");
+  fprintf(sink, "Block Cost (k.SEK)");
+  fprintf(sink, ", ");
+  fprintf(sink, "Cooling Cost (k.SEK)");
+  fprintf(sink, ", ");
+  fprintf(sink, "TOTAL COST (M.SEK)");
+  fprintf(sink, "\n");
 }
 
-void print_lattice_details(const char *lattice_name, double block_work_cost, double cooling_work_cost, BlockWork *block_work_details, size_t num_blocks) {
-  printf("%s", lattice_name);
-  printf(", ");
-  print_block_work_info(block_work_details, num_blocks);
-  printf(", ");
-  printf("%0.1f", NUM_ACHROMATS * block_work_cost/1e3);
-  printf(", ");
-  printf("%0.1f", NUM_ACHROMATS * cooling_work_cost/1e3);
-  printf(", ");
-  printf("%0.1f", NUM_ACHROMATS * (block_work_cost + cooling_work_cost)/1e6);
-  printf("\n");
+void print_lattice_details(FILE *sink, const char *lattice_name, double block_work_cost, double cooling_work_cost, BlockWork *block_work_details, size_t num_blocks) {
+  fprintf(sink, "%s", lattice_name);
+  fprintf(sink, ", ");
+  print_block_work_info(sink, block_work_details, num_blocks);
+  fprintf(sink, ", ");
+  fprintf(sink, "%0.1f", NUM_ACHROMATS * block_work_cost/1e3);
+  fprintf(sink, ", ");
+  fprintf(sink, "%0.1f", NUM_ACHROMATS * cooling_work_cost/1e3);
+  fprintf(sink, ", ");
+  fprintf(sink, "%0.1f", NUM_ACHROMATS * (block_work_cost + cooling_work_cost)/1e6);
+  fprintf(sink, "\n");
 }
 
-void print_block_work_info(BlockWork *blocks_replaced, size_t num_blocks) {
+void print_block_work_info(FILE *sink, BlockWork *blocks_replaced, size_t num_blocks) {
   for (size_t block_ind=0; block_ind<num_blocks; block_ind++) {
-    if (block_ind != 0) printf(", ");
-    if (blocks_replaced[block_ind] == BLK_WORK_REPLACE)  printf("R");
-    else if (blocks_replaced[block_ind] == BLK_WORK_MOD) printf("M");
-    else printf("-");
+    if (block_ind != 0) fprintf(sink, ", ");
+    if (blocks_replaced[block_ind] == BLK_WORK_REPLACE)  fprintf(sink, "R");
+    else if (blocks_replaced[block_ind] == BLK_WORK_MOD) fprintf(sink, "M");
+    else fprintf(sink, "-");
   }
 }
 
-void print_block_replacement_info(BlockWork *blocks_replaced, size_t num_blocks) {
-    printf("Replace:  ");
+void print_block_replacement_info(FILE *sink, BlockWork *blocks_replaced, size_t num_blocks) {
+    fprintf(sink, "Replace:  ");
     bool any_blocks_replaced = any_equal_to(blocks_replaced, num_blocks, BLK_WORK_REPLACE);
     for (size_t block_ind=0; block_ind<num_blocks; block_ind++)
-      if (blocks_replaced[block_ind] == BLK_WORK_REPLACE) printf("%s, ", block_type_string(block_ind));
-    if (!any_blocks_replaced) printf("-  ");
+      if (blocks_replaced[block_ind] == BLK_WORK_REPLACE) fprintf(sink, "%s, ", block_type_string(block_ind));
+    if (!any_blocks_replaced) fprintf(sink, "-  ");
 }
 
-void print_block_modification_info(BlockWork *blocks_replaced, size_t num_blocks) {
-    printf("Modify:  ");
+void print_block_modification_info(FILE *sink, BlockWork *blocks_replaced, size_t num_blocks) {
+    fprintf(sink, "Modify:  ");
     bool any_blocks_modified = any_equal_to(blocks_replaced, num_blocks, BLK_WORK_MOD);
     for (size_t block_ind=0; block_ind<num_blocks; block_ind++)
-      if (blocks_replaced[block_ind] == BLK_WORK_MOD) printf("%s, ", block_type_string(block_ind));
-    if (!any_blocks_modified) printf("-  ");
+      if (blocks_replaced[block_ind] == BLK_WORK_MOD) fprintf(sink, "%s, ", block_type_string(block_ind));
+    if (!any_blocks_modified) fprintf(sink, "-  ");
 }
 
 Info create_info_struct(void) {

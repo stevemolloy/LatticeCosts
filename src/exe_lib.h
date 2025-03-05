@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #define NUM_ACHROMATS 20
 #define NUM_K25PUMPS 6
@@ -170,12 +171,12 @@ const char *block_type_string(BlockType t);
 bool any_equal_to(BlockWork *array, size_t len, BlockWork needle);
 BlockWork work_due_to_mag(int cl);
 LatticeType get_lattice_type_from_name(const char *name);
-void print_file_summary(const char *latt_summ_filename, const FamilyDefns *fam_defns, const Info *info);
-void print_lattice_details(const char *lattice_name, double block_work_cost, double cooling_work_cost, BlockWork *block_work_details, size_t num_blocks);
-void print_header(void);
-void print_block_work_info(BlockWork *blocks_replaced, size_t num_blocks);
-void print_block_replacement_info(BlockWork *blocks_replaced, size_t num_blocks);
-void print_block_modification_info(BlockWork *blocks_replaced, size_t num_blocks);
+void print_file_summary(FILE *sink, const char *latt_summ_filename, const FamilyDefns *fam_defns, const Info *info);
+void print_lattice_details(FILE *sink, const char *lattice_name, double block_work_cost, double cooling_work_cost, BlockWork *block_work_details, size_t num_blocks);
+void print_header(FILE *sink);
+void print_block_work_info(FILE *sink, BlockWork *blocks_replaced, size_t num_blocks);
+void print_block_replacement_info(FILE *sink, BlockWork *blocks_replaced, size_t num_blocks);
+void print_block_modification_info(FILE *sink, BlockWork *blocks_replaced, size_t num_blocks);
 Info create_info_struct(void);
 
 void concat_strings(const char *str1, const char *str2, char *buffer, size_t buff_len);
