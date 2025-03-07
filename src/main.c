@@ -21,6 +21,7 @@ void *active_realloc(void *ptr, size_t size) { return sdm_arena_realloc(active_a
 
 int main(int argc, char *argv[]) {
   int retval = 0;
+  FILE *outfile = stdout;
 
   char *programname = sdm_shift_args(&argc, &argv);
   if (argc < 1) REPORT_AND_DIE("Incorrect usage:\n%s <xls-file>\n", programname);
@@ -62,18 +63,18 @@ int main(int argc, char *argv[]) {
   Costs all_costs = {0};
   SDM_ARRAY_PUSH(all_costs, block_work_costs);
   SDM_ARRAY_PUSH(all_costs, cooling_work_costs);
-  FILE *sink = stdout;
   if (out_filename != NULL) {
-    sink = fopen(out_filename, "w");
-    if (sink == NULL)
+    outfile = fopen(out_filename, "w");
+    if (outfile == NULL)
       REPORT_AND_DIE("ERROR: Could not open %s for writing\n", out_filename);
   }
-  print_file_summary(sink, latt_summ_filename, &fam_defns, &info);
-  print_header(sink);
+  print_file_summary(outfile, latt_summ_filename, &fam_defns, &info);
+  print_header(outfile);
   for (size_t i=0; i<fam_defns.length; i++)
-    print_lattice_details(sink, fam_defns.data[i].name, block_work_costs[i], cooling_work_costs[i], &block_work_details[i*BLOCK_COUNT], BLOCK_COUNT);
+    print_lattice_details(outfile, fam_defns.data[i].name, block_work_costs[i], cooling_work_costs[i], &block_work_details[i*BLOCK_COUNT], BLOCK_COUNT);
 
 dealloc_and_return:
+  if (outfile != stdout) fclose(outfile);
   sdm_arena_free(&main_arena);
   return retval;
 }
