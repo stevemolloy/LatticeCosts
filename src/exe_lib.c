@@ -1,6 +1,8 @@
 #include <assert.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #include <xlsxio_read.h>
 
@@ -493,6 +495,14 @@ int get_fam_locs_callback(size_t row, size_t col, const char* value, void* callb
 
   if (strcmp(value, "Hardware Check\n?")==0) {
     fam_locs->HW_check = col;
+  } else if (strcmp(value, "Last Updated")==0) {
+    fam_locs->LastUpdated = col;
+  } else if (strcmp(value, "Magnet Limits Date")==0) {
+    fam_locs->MagLimitsDate = col;
+  } else if (strcmp(value, "Description")==0) {
+    fam_locs->Description = col;
+  } else if (strcmp(value, "Comment")==0) {
+    fam_locs->Comment = col;
   } else if (strcmp(value, "D1")==0) {
     if (fam_locs->D1_value == 0) {
       fam_locs->D1_value  = col;
@@ -726,7 +736,19 @@ int get_fam_strengths_callback(size_t row, size_t col, const char* value, void* 
   else if (col == fam_defns->fam_locs.S1_combinedq_cl) fam_defns->data[index_of_last].cls[MAG_S1_COMBINEDQ] = strtol(value, NULL, 10);
   else if (col == fam_defns->fam_locs.S3_combinedq_cl) fam_defns->data[index_of_last].cls[MAG_S3_COMBINEDQ] = strtol(value, NULL, 10);
   else if (col == fam_defns->fam_locs.S6_combinedq_cl) fam_defns->data[index_of_last].cls[MAG_S6_COMBINEDQ] = strtol(value, NULL, 10);
-  else if (col == fam_defns->fam_locs.HW_check) {
+  else if (col == fam_defns->fam_locs.LastUpdated) fam_defns->data[index_of_last].lastupdated = strtof(value, NULL);
+  else if (col == fam_defns->fam_locs.MagLimitsDate) fam_defns->data[index_of_last].maglimitsdate = strtof(value, NULL);
+  else if (col == fam_defns->fam_locs.Description) {
+    size_t sz = strlen(value);
+    fam_defns->data[index_of_last].description = SDM_MALLOC(sz + 1);
+    memcpy(fam_defns->data[index_of_last].description, value, sz);
+    for (size_t i=0; i<sz; i++) if (fam_defns->data[index_of_last].description[i]==',') fam_defns->data[index_of_last].description[i] = ' ';
+  } else if (col == fam_defns->fam_locs.Comment) {
+    size_t sz = strlen(value);
+    fam_defns->data[index_of_last].comment = SDM_MALLOC(sz + 1);
+    memcpy(fam_defns->data[index_of_last].comment, value, sz);
+    for (size_t i=0; i<sz; i++) if (fam_defns->data[index_of_last].comment[i]==',') fam_defns->data[index_of_last].comment[i] = ' ';
+  } else if (col == fam_defns->fam_locs.HW_check) {
     if (value != NULL) {
       if (strncmp(value, "Y", 1) == 0) {
         fam_defns->data[index_of_last].HW_check = true;
@@ -781,37 +803,49 @@ static int is_leap_year(int year) {
 }
 
 // Function to convert days since 1900-01-01 to a date string
-char* days_to_date(int days) {
-    int year = 1900;
-    int month = 1;
-    int day = 1;
-    static char date[11];
-    
-    // Adjust for correct day alignment
-    days -= 2; // Corrects the two-day error
+char* days_to_date(float days) {
+  int whole_days = floorf(days);
 
-    // Days in each month (non-leap year)
-    int days_in_month[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    
-    // Process years
-    while (days >= (is_leap_year(year) ? 366 : 365)) {
-        days -= is_leap_year(year) ? 366 : 365;
-        year++;
-    }
-    
-    // Process months
-    while (days >= ((month == 2 && is_leap_year(year)) ? 29 : days_in_month[month - 1])) {
-        days -= (month == 2 && is_leap_year(year)) ? 29 : days_in_month[month - 1];
-        month++;
-    }
-    
-    // Remaining days determine the final day
-    day += days;
-    
-    // Format the date string as YYYY-MM-DD
-    snprintf(date, sizeof(date), "%04d-%02d-%02d", year, month, day);
-    
-    return date;
+  float hours = (days - whole_days) * 24;
+  int whole_hours = floorf(hours);
+
+  float minutes = (hours - whole_hours) * 60;
+  int whole_minutes = floorf(minutes);
+
+  float seconds = (minutes - whole_minutes) * 60;
+  int whole_seconds = floorf(seconds);
+
+  int year = 1900;
+  int month = 1;
+  int day = 1;
+  size_t timestamp_len = 32;
+  char *date = SDM_MALLOC(timestamp_len);
+  
+  // Adjust for correct day alignment
+  whole_days -= 2; // Corrects the two-day error
+
+  // Days in each month (non-leap year)
+  int days_in_month[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+  
+  // Process years
+  while (whole_days >= (is_leap_year(year) ? 366 : 365)) {
+      whole_days -= is_leap_year(year) ? 366 : 365;
+      year++;
+  }
+  
+  // Process months
+  while (whole_days >= ((month == 2 && is_leap_year(year)) ? 29 : days_in_month[month - 1])) {
+      whole_days -= (month == 2 && is_leap_year(year)) ? 29 : days_in_month[month - 1];
+      month++;
+  }
+  
+  // Remaining days determine the final day
+  day += whole_days;
+  
+  // Format the date string as YYYY-MM-DD
+  snprintf(date, timestamp_len, "%04d-%02d-%02d %02d:%02d:%02d", year, month, day, whole_hours, whole_minutes, whole_seconds);
+  
+  return date;
 }
 
 void print_file_summary(FILE *sink, const char *latt_summ_filename, const FamilyDefns *fam_defns, const Info *info) {
@@ -837,11 +871,19 @@ void print_header(FILE *sink) {
   fprintf(sink, "Cooling Cost (k.SEK)");
   fprintf(sink, ", ");
   fprintf(sink, "TOTAL COST (M.SEK)");
+  fprintf(sink, ", ");
+  fprintf(sink, "Last Updated");
+  fprintf(sink, ", ");
+  fprintf(sink, "Magnet Limits Date");
+  fprintf(sink, ", ");
+  fprintf(sink, "Description");
+  fprintf(sink, ", ");
+  fprintf(sink, "Comment");
   fprintf(sink, "\n");
 }
 
-void print_lattice_details(FILE *sink, const char *lattice_name, double block_work_cost, double cooling_work_cost, BlockWork *block_work_details, size_t num_blocks) {
-  fprintf(sink, "%s", lattice_name);
+void print_lattice_details(FILE *sink, FamilyDefn fam, double block_work_cost, double cooling_work_cost, BlockWork *block_work_details, size_t num_blocks) {
+  fprintf(sink, "%s", fam.name);
   fprintf(sink, ", ");
   print_block_work_info(sink, block_work_details, num_blocks);
   fprintf(sink, ", ");
@@ -850,6 +892,18 @@ void print_lattice_details(FILE *sink, const char *lattice_name, double block_wo
   fprintf(sink, "%0.1f", NUM_ACHROMATS * cooling_work_cost/1e3);
   fprintf(sink, ", ");
   fprintf(sink, "%0.1f", NUM_ACHROMATS * (block_work_cost + cooling_work_cost)/1e6);
+  fprintf(sink, ", ");
+  if (fam.lastupdated) fprintf(sink, "%s", days_to_date(fam.lastupdated));
+  else fprintf(sink, "-");
+  fprintf(sink, ", ");
+  if (fam.maglimitsdate) fprintf(sink, "%s", days_to_date(fam.maglimitsdate));
+  else fprintf(sink, "-");
+  fprintf(sink, ", ");
+  if (fam.description) fprintf(sink, "%s", fam.description);
+  else fprintf(sink, "-");
+  fprintf(sink, ", ");
+  if (fam.comment) fprintf(sink, "%s", fam.comment);
+  else fprintf(sink, "-");
   fprintf(sink, "\n");
 }
 

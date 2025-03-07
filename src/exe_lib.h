@@ -75,12 +75,17 @@ typedef struct {
   size_t T1_cl, T2_cl;
   size_t S1_combineds_cl, S1_combinedq_cl, S3_combineds_cl, S3_combinedq_cl, S6_combineds_cl, S6_combinedq_cl;
   size_t HW_check;
+  size_t LastUpdated, MagLimitsDate, Description, Comment;
 } FamilyLocations;
 
 typedef struct {
   char *name;
   double values[MAG_COUNT];
   int cls[MAG_COUNT];
+  float lastupdated;
+	float maglimitsdate;
+	char *description;
+	char *comment;
   bool HW_check;
 } FamilyDefn;
 
@@ -172,7 +177,7 @@ bool any_equal_to(BlockWork *array, size_t len, BlockWork needle);
 BlockWork work_due_to_mag(int cl);
 LatticeType get_lattice_type_from_name(const char *name);
 void print_file_summary(FILE *sink, const char *latt_summ_filename, const FamilyDefns *fam_defns, const Info *info);
-void print_lattice_details(FILE *sink, const char *lattice_name, double block_work_cost, double cooling_work_cost, BlockWork *block_work_details, size_t num_blocks);
+void print_lattice_details(FILE *sink, FamilyDefn fam, double block_work_cost, double cooling_work_cost, BlockWork *block_work_details, size_t num_blocks);
 void print_header(FILE *sink);
 void print_block_work_info(FILE *sink, BlockWork *blocks_replaced, size_t num_blocks);
 void print_block_replacement_info(FILE *sink, BlockWork *blocks_replaced, size_t num_blocks);
@@ -181,7 +186,7 @@ Info create_info_struct(void);
 
 void concat_strings(const char *str1, const char *str2, char *buffer, size_t buff_len);
 bool ends_with(const char *str, const char *suffix);
-char* days_to_date(int days);
+char* days_to_date(float days);
 
 #endif // !_EXE_LIB_H
 

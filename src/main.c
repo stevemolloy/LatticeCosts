@@ -71,7 +71,7 @@ int main(int argc, char *argv[]) {
   print_file_summary(outfile, latt_summ_filename, &fam_defns, &info);
   print_header(outfile);
   for (size_t i=0; i<fam_defns.length; i++)
-    print_lattice_details(outfile, fam_defns.data[i].name, block_work_costs[i], cooling_work_costs[i], &block_work_details[i*BLOCK_COUNT], BLOCK_COUNT);
+    print_lattice_details(outfile, fam_defns.data[i], block_work_costs[i], cooling_work_costs[i], &block_work_details[i*BLOCK_COUNT], BLOCK_COUNT);
 
 dealloc_and_return:
   if (outfile != stdout) fclose(outfile);
