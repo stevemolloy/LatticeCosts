@@ -65,11 +65,19 @@ int main(int argc, char *argv[]) {
   double *block_work_costs = SDM_MALLOC(fam_defns.length * sizeof(double));
   double *cooling_work_costs = SDM_MALLOC(fam_defns.length * sizeof(double));
   BlockWork *block_work_details = SDM_MALLOC(fam_defns.length * BLOCK_COUNT * sizeof(BlockWork));
+  bool new_ps_needed[LATT_COUNT][MAG_COUNT];
+
   for (size_t i=0; i<fam_defns.length; i++) {
     FamilyDefn fam = fam_defns.data[i];
     if (!get_blocks_work_details(fam, &block_work_details[i*BLOCK_COUNT], BLOCK_COUNT)) continue;
     block_work_costs[i] = total_block_work_costs(fam, &block_work_details[i*BLOCK_COUNT], block_costs, BLOCK_COUNT);
     cooling_work_costs[i] = total_cooling_work_costs(&block_work_details[i*BLOCK_COUNT], cooling_costs, cooling_cost_types, COOLING_COUNT);
+
+    for (size_t j=0; j<MAG_COUNT; j++) {
+      if (circuits_in_latticefamily.circuits[LATT_A01][j] == 0 && circuits_in_latticefamily.circuits[get_lattice_type_from_name(fam.name)][j] > 0) {
+        new_ps_needed[get_lattice_type_from_name(fam.name)][j] = true;
+      }
+    }
   }
   
   Costs all_costs = {0};
@@ -82,8 +90,10 @@ int main(int argc, char *argv[]) {
   }
   print_file_summary(outfile, latt_summ_filename, &fam_defns, &info);
   print_header(outfile);
-  for (size_t i=0; i<fam_defns.length; i++)
-    print_lattice_details(outfile, fam_defns.data[i], block_work_costs[i], cooling_work_costs[i], &block_work_details[i*BLOCK_COUNT], BLOCK_COUNT);
+  for (size_t i=0; i<fam_defns.length; i++) {
+    FamilyDefn fam = fam_defns.data[i];
+    print_lattice_details(outfile, fam, block_work_costs[i], cooling_work_costs[i], &block_work_details[i*BLOCK_COUNT], BLOCK_COUNT, new_ps_needed[get_lattice_type_from_name(fam.name)]);
+  }
 
 dealloc_and_return:
   if (outfile != stdout) fclose(outfile);

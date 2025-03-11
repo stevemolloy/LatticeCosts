@@ -185,7 +185,7 @@ bool any_equal_to(BlockWork *array, size_t len, BlockWork needle);
 BlockWork work_due_to_mag(int cl);
 LatticeType get_lattice_type_from_name(const char *name);
 void print_file_summary(FILE *sink, const char *latt_summ_filename, const FamilyDefns *fam_defns, const Info *info);
-void print_lattice_details(FILE *sink, FamilyDefn fam, double block_work_cost, double cooling_work_cost, BlockWork *block_work_details, size_t num_blocks);
+void print_lattice_details(FILE *sink, FamilyDefn fam, double block_work_cost, double cooling_work_cost, BlockWork *block_work_details, size_t num_blocks, bool *new_ps_needed);
 void print_header(FILE *sink);
 void print_block_work_info(FILE *sink, BlockWork *blocks_replaced, size_t num_blocks);
 void print_block_replacement_info(FILE *sink, BlockWork *blocks_replaced, size_t num_blocks);

@@ -983,6 +983,10 @@ void print_header(FILE *sink) {
     fprintf(sink, "%s", block_type_string(i));
   }
   fprintf(sink, ", ");
+  for (size_t i=0; i<MAG_COUNT; i++) {
+    fprintf(sink, "New %s PS?", string_from_magtype(i));
+    fprintf(sink, ", ");
+  }
   fprintf(sink, "Block Cost (k.SEK)");
   fprintf(sink, ", ");
   fprintf(sink, "Cooling Cost (k.SEK)");
@@ -999,11 +1003,15 @@ void print_header(FILE *sink) {
   fprintf(sink, "\n");
 }
 
-void print_lattice_details(FILE *sink, FamilyDefn fam, double block_work_cost, double cooling_work_cost, BlockWork *block_work_details, size_t num_blocks) {
+void print_lattice_details(FILE *sink, FamilyDefn fam, double block_work_cost, double cooling_work_cost, BlockWork *block_work_details, size_t num_blocks, bool *new_ps_needed) {
   fprintf(sink, "%s", fam.name);
   fprintf(sink, ", ");
   print_block_work_info(sink, block_work_details, num_blocks);
   fprintf(sink, ", ");
+  for (size_t i=0; i<MAG_COUNT; i++) {
+    fprintf(sink, "%s", new_ps_needed[i] ? "Y" : "-");
+    fprintf(sink, ", ");
+  }
   fprintf(sink, "%0.1f", NUM_ACHROMATS * block_work_cost/1e3);
   fprintf(sink, ", ");
   fprintf(sink, "%0.1f", NUM_ACHROMATS * cooling_work_cost/1e3);
