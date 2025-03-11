@@ -19,12 +19,19 @@ static sdm_arena_t *active_arena = &main_arena;
 void *active_alloc(size_t size)              { return sdm_arena_alloc(active_arena, size); }
 void *active_realloc(void *ptr, size_t size) { return sdm_arena_realloc(active_arena, ptr, size); }
 
+void usage(FILE *sink, const char *programname) {
+  fprintf(sink, "%s -o <lattice_summary_xls_file> [-o <output_filename>]\n", programname);
+}
+
 int main(int argc, char *argv[]) {
   int retval = 0;
   FILE *outfile = stdout;
 
   char *programname = sdm_shift_args(&argc, &argv);
-  if (argc < 1) REPORT_AND_DIE("Incorrect usage:\n%s <xls-file>\n", programname);
+  if (argc < 1) {
+    usage(stderr, programname);
+    REPORT_AND_DIE("ERROR: No input file provided\n%s", "");
+  }
 
   char *latt_summ_filename = NULL;
   char *out_filename = NULL;
