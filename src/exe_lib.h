@@ -105,6 +105,12 @@ typedef struct {
 } Info;
 
 typedef struct {
+  int circuits_in_latticefamily[LATT_COUNT][MAG_COUNT];
+  size_t mag_row[MAG_COUNT];
+  size_t family_column[LATT_COUNT];
+} CircuitsInFamilyDefn;
+
+typedef struct {
   size_t capacity;
   size_t length;
   char **data;
