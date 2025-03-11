@@ -180,6 +180,7 @@ int row_callback(size_t row, size_t maxcol, void* callbackdata);
 int get_fam_strengths_callback(size_t row, size_t col, const char* value, void* callbackdata);
 int get_info_details_callback(size_t row, size_t col, const char* value, void* callbackdata);
 const char *block_type_string(BlockType t);
+const char *string_from_magtype(MagType type);
 bool any_equal_to(BlockWork *array, size_t len, BlockWork needle);
 BlockWork work_due_to_mag(int cl);
 LatticeType get_lattice_type_from_name(const char *name);

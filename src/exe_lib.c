@@ -535,6 +535,50 @@ int get_circuits_per_family(const char *circuit_def_filename, CircuitsInFamilyDe
   return 0;
 }
 
+const char *string_from_magtype(MagType type) {
+  switch (type) {
+    case MAG_D1: return "D1";
+	  case MAG_D1Q: return "D1Q";
+	  case MAG_D2: return "D2";
+	  case MAG_D2Q: return "D2Q";
+	  case MAG_D3: return "D3";
+	  case MAG_D3Q: return "D3Q";
+    case MAG_Q1: return "Q1";
+	  case MAG_Q2: return "Q2";
+	  case MAG_Q3: return "Q3";
+	  case MAG_Q4: return "Q4";
+	  case MAG_Q5: return "Q5";
+	  case MAG_Q6: return "Q6";
+    case MAG_R1Q: return "R1Q";
+	  case MAG_R1D: return "R1D";
+	  case MAG_R1OFFS: return "R1OFFS";
+	  case MAG_R2Q: return "R2Q";
+	  case MAG_R2D: return "R2D";
+	  case MAG_R2OFFS: return "R2OFFS";
+	  case MAG_R3Q: return "R3Q";
+	  case MAG_R3D: return "R3D";
+	  case MAG_R3OFFS: return "R3OFFS";
+    case MAG_S1: return "S1";
+	  case MAG_S2: return "S2";
+	  case MAG_S3: return "S3";
+	  case MAG_S4: return "S4";
+	  case MAG_S5: return "S5";
+	  case MAG_S6: return "S6";
+    case MAG_O1: return "O1";
+	  case MAG_O2: return "O2";
+	  case MAG_O3: return "O3";
+    case MAG_T1: return "T1";
+	  case MAG_T2: return "T2";
+    case MAG_S1_COMBINEDS: return "S1_COMBINEDS";
+	  case MAG_S1_COMBINEDQ: return "S1_COMBINEDQ";
+	  case MAG_S3_COMBINEDS: return "S3_COMBINEDS";
+	  case MAG_S3_COMBINEDQ: return "S3_COMBINEDQ";
+	  case MAG_S6_COMBINEDS: return "S6_COMBINEDS";
+	  case MAG_S6_COMBINEDQ: return "S6_COMBINEDQ";
+    case MAG_COUNT: return "COUNT";
+  }
+}
+
 int get_info_details_callback(size_t row, size_t col, const char* value, void* callbackdata) {
   (void)row;
   if (value == NULL) return 0;
