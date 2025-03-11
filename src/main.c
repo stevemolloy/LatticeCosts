@@ -36,8 +36,6 @@ int main(int argc, char *argv[]) {
   char *latt_summ_filename = NULL;
   char *out_filename = NULL;
 
-  CircuitsInFamilyDefn circuits_in_latticefamily = {0};
-
   while (argc > 0) {
     const char *input_arg = sdm_shift_args(&argc, &argv);
     if (strcmp(input_arg, "-o")==0) {
@@ -57,10 +55,11 @@ int main(int argc, char *argv[]) {
   FamilyDefns fam_defns = {0};
   Info info = create_info_struct();
   if (get_lattice_summaries(latt_summ_filename, &fam_defns, &info) < 0)
-    REPORT_AND_DIE("Error opening .xlsx file: %s\n", latt_summ_filename);
+    REPORT_AND_DIE("ERROR: Cannot open .xlsx file: %s\n", latt_summ_filename);
 
+  CircuitsInFamilyDefn circuits_in_latticefamily = {0};
   if (get_circuits_per_family(famcircuitsdefnfilename, &circuits_in_latticefamily) < 0)
-    REPORT_AND_DIE("Error opening .xlsx file: %s\n", famcircuitsdefnfilename);
+    REPORT_AND_DIE("ERROR: Cannot open .xlsx file: %s\n", famcircuitsdefnfilename);
 
   // Calculate costs from this data
   double *block_work_costs = SDM_MALLOC(fam_defns.length * sizeof(double));
