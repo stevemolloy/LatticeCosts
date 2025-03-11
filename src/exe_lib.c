@@ -522,7 +522,7 @@ int get_circuits_per_family(const char *circuit_def_filename, CircuitsInFamilyDe
         continue;
       }
 
-      circuits_data->circuits_in_latticefamily[lattice_col[col]][current_magnet] = atoi(value);
+      circuits_data->circuits[lattice_col[col]][current_magnet] = atoi(value);
 
       col++;
       free(value);
