@@ -29,6 +29,8 @@ int main(int argc, char *argv[]) {
   char *latt_summ_filename = NULL;
   char *out_filename = NULL;
 
+  CircuitsInFamilyDefn circuits_in_latticefamily = {0};
+
   while (argc > 0) {
     const char *input_arg = sdm_shift_args(&argc, &argv);
     if (strcmp(input_arg, "-o")==0) {
@@ -38,6 +40,7 @@ int main(int argc, char *argv[]) {
       latt_summ_filename = (char*)input_arg;
     }
   }
+  const char *famcircuitsdefnfilename = "./data/Magnet_PS_circuits.xlsx";
 
   set_lattice_definitions();
   set_block_costs();
@@ -48,6 +51,9 @@ int main(int argc, char *argv[]) {
   Info info = create_info_struct();
   if (get_lattice_summaries(latt_summ_filename, &fam_defns, &info) < 0)
     REPORT_AND_DIE("Error opening .xlsx file: %s\n", latt_summ_filename);
+
+  if (get_circuits_per_family(famcircuitsdefnfilename, &circuits_in_latticefamily) < 0)
+    REPORT_AND_DIE("Error opening .xlsx file: %s\n", famcircuitsdefnfilename);
 
   // Calculate costs from this data
   double *block_work_costs = SDM_MALLOC(fam_defns.length * sizeof(double));

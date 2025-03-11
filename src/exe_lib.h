@@ -168,6 +168,7 @@ double total_block_work_costs(FamilyDefn fam, BlockWork *block_work, double *cos
 double total_cooling_work_costs(BlockWork *block_work, double *costs, CostType *cost_types, size_t costs_length);
 int print_sheet_name(const char *name, void *callbackdata);
 int get_lattice_summaries(const char *latt_summ_filename, FamilyDefns *fam_defns, Info *info);
+int get_circuits_per_family(const char *circuit_def_filename, CircuitsInFamilyDefn *circuits_in_latticefamily);
 int get_fam_locs_callback(size_t row, size_t col, const char* value, void* callbackdata);
 int row_callback(size_t row, size_t maxcol, void* callbackdata);
 int get_fam_strengths_callback(size_t row, size_t col, const char* value, void* callbackdata);

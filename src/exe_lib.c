@@ -462,6 +462,79 @@ int get_lattice_summaries(const char *latt_summ_filename, FamilyDefns *fam_defns
   return 0;
 }
 
+int get_circuits_per_family(const char *circuit_def_filename, CircuitsInFamilyDefn *circuits_data) {
+  xlsxioreader xlsxioread = xlsxioread_open(circuit_def_filename);
+
+  const char *datasheet_name = "FullAchromat";
+
+  size_t lattice_col[2 * LATT_COUNT] = {0};
+  MagType current_magnet = MAG_COUNT;
+  char *value;
+  xlsxioreadersheet datasheet = xlsxioread_sheet_open(xlsxioread, datasheet_name, XLSXIOREAD_SKIP_ALL_EMPTY);
+  while (xlsxioread_sheet_next_row(datasheet)) {
+    size_t col = 0;
+    while ((value = xlsxioread_sheet_next_cell(datasheet)) != NULL) {
+      if      (strcmp(value, "D1") == 0) { current_magnet = MAG_D1;  col++; free(value); continue; }
+      else if (strcmp(value, "D2") == 0) { current_magnet = MAG_D2;  col++; free(value); continue; }
+      else if (strcmp(value, "D3") == 0) { current_magnet = MAG_D3;  col++; free(value); continue; }
+      else if (strcmp(value, "Q1") == 0) { current_magnet = MAG_Q1;  col++; free(value); continue; }
+      else if (strcmp(value, "Q2") == 0) { current_magnet = MAG_Q2;  col++; free(value); continue; }
+      else if (strcmp(value, "Q3") == 0) { current_magnet = MAG_Q3;  col++; free(value); continue; }
+      else if (strcmp(value, "Q4") == 0) { current_magnet = MAG_Q4;  col++; free(value); continue; }
+      else if (strcmp(value, "Q5") == 0) { current_magnet = MAG_Q5;  col++; free(value); continue; }
+      else if (strcmp(value, "Q6") == 0) { current_magnet = MAG_Q6;  col++; free(value); continue; }
+      else if (strcmp(value, "R1") == 0) { current_magnet = MAG_R1Q; col++; free(value); continue; }
+      else if (strcmp(value, "R2") == 0) { current_magnet = MAG_R2Q; col++; free(value); continue; }
+      else if (strcmp(value, "R3") == 0) { current_magnet = MAG_R3Q; col++; free(value); continue; }
+      else if (strcmp(value, "S1") == 0) { current_magnet = MAG_S1;  col++; free(value); continue; }
+      else if (strcmp(value, "S2") == 0) { current_magnet = MAG_S2;  col++; free(value); continue; }
+      else if (strcmp(value, "S3") == 0) { current_magnet = MAG_S3;  col++; free(value); continue; }
+      else if (strcmp(value, "S4") == 0) { current_magnet = MAG_S4;  col++; free(value); continue; }
+      else if (strcmp(value, "S5") == 0) { current_magnet = MAG_S5;  col++; free(value); continue; }
+      else if (strcmp(value, "S6") == 0) { current_magnet = MAG_S6;  col++; free(value); continue; }
+      else if (strcmp(value, "O1") == 0) { current_magnet = MAG_O1;  col++; free(value); continue; }
+      else if (strcmp(value, "O2") == 0) { current_magnet = MAG_O2;  col++; free(value); continue; }
+      else if (strcmp(value, "O3") == 0) { current_magnet = MAG_O3;  col++; free(value); continue; }
+      else if (strcmp(value, "T1") == 0) { current_magnet = MAG_T1;  col++; free(value); continue; }
+      else if (strcmp(value, "T2") == 0) { current_magnet = MAG_T2;  col++; free(value); continue; }
+      else if (strcmp(value, "S1_comb") == 0) { current_magnet = MAG_S1_COMBINEDS; col++; free(value); continue; }
+      else if (strcmp(value, "S3_comb") == 0) { current_magnet = MAG_S3_COMBINEDS; col++; free(value); continue; }
+      else if (strcmp(value, "S6_comb") == 0) { current_magnet = MAG_S6_COMBINEDS; col++; free(value); continue; }
+
+      else if (strcmp(value, "a01") == 0) {lattice_col[col] = LATT_A01; col++; free(value); continue;}
+      else if (strcmp(value, "a02") == 0) {lattice_col[col] = LATT_A02; col++; free(value); continue;}
+      else if (strcmp(value, "b01") == 0) {lattice_col[col] = LATT_B01; col++; free(value); continue;}
+      else if (strcmp(value, "b02") == 0) {lattice_col[col] = LATT_B02; col++; free(value); continue;}
+      else if (strcmp(value, "b03") == 0) {lattice_col[col] = LATT_B03; col++; free(value); continue;}
+      else if (strcmp(value, "c01") == 0) {lattice_col[col] = LATT_C01; col++; free(value); continue;}
+      else if (strcmp(value, "d01") == 0) {lattice_col[col] = LATT_D01; col++; free(value); continue;}
+      else if (strcmp(value, "e01") == 0) {lattice_col[col] = LATT_E01; col++; free(value); continue;}
+      else if (strcmp(value, "f01") == 0) {lattice_col[col] = LATT_F01; col++; free(value); continue;}
+      else if (strcmp(value, "f02") == 0) {lattice_col[col] = LATT_F02; col++; free(value); continue;}
+      else if (strcmp(value, "g01") == 0) {lattice_col[col] = LATT_G01; col++; free(value); continue;}
+      else if (strcmp(value, "h01") == 0) {lattice_col[col] = LATT_H01; col++; free(value); continue;}
+      else if (strcmp(value, "h02") == 0) {lattice_col[col] = LATT_H02; col++; free(value); continue;}
+      else if (strcmp(value, "i01") == 0) {lattice_col[col] = LATT_I01; col++; free(value); continue;}
+
+      if (current_magnet == MAG_COUNT) {
+        col++;
+        free(value);
+        continue;
+      }
+
+      circuits_data->circuits_in_latticefamily[lattice_col[col]][current_magnet] = atoi(value);
+
+      col++;
+      free(value);
+    }
+  }
+  xlsxioread_sheet_close(datasheet);
+
+  xlsxioread_close(xlsxioread);
+
+  return 0;
+}
+
 int get_info_details_callback(size_t row, size_t col, const char* value, void* callbackdata) {
   (void)row;
   if (value == NULL) return 0;
