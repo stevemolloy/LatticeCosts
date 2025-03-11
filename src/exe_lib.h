@@ -169,6 +169,7 @@ void set_block_masses(void);
 void set_block_build_costs(void);
 void set_block_costs(void);
 void set_cooling_costs(void);
+bool fake_magnet(MagType type);
 bool get_blocks_work_details(FamilyDefn fam, BlockWork *blocks_replaced_array, size_t num_blocks);
 double total_block_work_costs(FamilyDefn fam, BlockWork *block_work, double *costs, size_t block_count);
 double total_cooling_work_costs(BlockWork *block_work, double *costs, CostType *cost_types, size_t costs_length);

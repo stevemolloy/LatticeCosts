@@ -69,12 +69,13 @@ int main(int argc, char *argv[]) {
 
   for (size_t i=0; i<fam_defns.length; i++) {
     FamilyDefn fam = fam_defns.data[i];
+    LatticeType lattice_type = get_lattice_type_from_name(fam.name);
     if (!get_blocks_work_details(fam, &block_work_details[i*BLOCK_COUNT], BLOCK_COUNT)) continue;
     block_work_costs[i] = total_block_work_costs(fam, &block_work_details[i*BLOCK_COUNT], block_costs, BLOCK_COUNT);
     cooling_work_costs[i] = total_cooling_work_costs(&block_work_details[i*BLOCK_COUNT], cooling_costs, cooling_cost_types, COOLING_COUNT);
 
     for (size_t j=0; j<MAG_COUNT; j++) {
-      if (circuits_in_latticefamily.circuits[LATT_A01][j] == 0 && circuits_in_latticefamily.circuits[get_lattice_type_from_name(fam.name)][j] > 0) {
+      if (circuits_in_latticefamily.circuits[LATT_A01][j] == 0 && circuits_in_latticefamily.circuits[lattice_type][j] > 0) {
         new_ps_needed[get_lattice_type_from_name(fam.name)][j] = true;
       }
     }

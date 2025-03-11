@@ -474,7 +474,8 @@ int get_circuits_per_family(const char *circuit_def_filename, CircuitsInFamilyDe
   while (xlsxioread_sheet_next_row(datasheet)) {
     size_t col = 0;
     while ((value = xlsxioread_sheet_next_cell(datasheet)) != NULL) {
-      if      (strcmp(value, "D1") == 0) { current_magnet = MAG_D1;  col++; free(value); continue; }
+      if (strcmp(value, "TOTAL") == 0) { col++; free(value); break; }
+      else if (strcmp(value, "D1") == 0) { current_magnet = MAG_D1;  col++; free(value); continue; }
       else if (strcmp(value, "D2") == 0) { current_magnet = MAG_D2;  col++; free(value); continue; }
       else if (strcmp(value, "D3") == 0) { current_magnet = MAG_D3;  col++; free(value); continue; }
       else if (strcmp(value, "Q1") == 0) { current_magnet = MAG_Q1;  col++; free(value); continue; }
@@ -976,6 +977,26 @@ void print_file_summary(FILE *sink, const char *latt_summ_filename, const Family
   fprintf(sink, "--------------------------------------------------------\n");
 }
 
+bool fake_magnet(MagType type) {
+  switch (type) {
+    case MAG_D1: case MAG_D2: case MAG_D3:
+    case MAG_Q1: case MAG_Q2: case MAG_Q3: case MAG_Q4: case MAG_Q5: case MAG_Q6:
+    case MAG_R1Q: case MAG_R2Q: case MAG_R3Q:
+    case MAG_S1: case MAG_S2: case MAG_S3: case MAG_S4: case MAG_S5: case MAG_S6:
+    case MAG_O1: case MAG_O2: case MAG_O3:
+    case MAG_T1: case MAG_T2:
+    case MAG_S1_COMBINEDS: case MAG_S3_COMBINEDS: case MAG_S6_COMBINEDS:
+      return false;
+	  case MAG_D1Q: case MAG_D2Q: case MAG_D3Q:
+	  case MAG_R1D: case MAG_R1OFFS:
+	  case MAG_R2D: case MAG_R2OFFS:
+	  case MAG_R3D: case MAG_R3OFFS:
+	  case MAG_S1_COMBINEDQ: case MAG_S3_COMBINEDQ: case MAG_S6_COMBINEDQ:
+    case MAG_COUNT:
+      return true;
+  }
+}
+
 void print_header(FILE *sink) {
   fprintf(sink, "Lattice name, ");
   for (size_t i=0; i<BLOCK_COUNT; i++) {
@@ -984,6 +1005,7 @@ void print_header(FILE *sink) {
   }
   fprintf(sink, ", ");
   for (size_t i=0; i<MAG_COUNT; i++) {
+    if (fake_magnet(i)) continue;
     fprintf(sink, "New %s PS?", string_from_magtype(i));
     fprintf(sink, ", ");
   }
@@ -1009,6 +1031,7 @@ void print_lattice_details(FILE *sink, FamilyDefn fam, double block_work_cost, d
   print_block_work_info(sink, block_work_details, num_blocks);
   fprintf(sink, ", ");
   for (size_t i=0; i<MAG_COUNT; i++) {
+    if (fake_magnet(i)) continue;
     fprintf(sink, "%s", new_ps_needed[i] ? "Y" : "-");
     fprintf(sink, ", ");
   }
