@@ -29,5 +29,5 @@ clean:
 	rm -rf $(BINDIR) $(OBJ)
 
 run: $(BIN)
-	$(BIN) ./data/LatticeSummaries.xlsx -o ./output/results.csv
+	$(BIN) ./data/LatticeSummaries.xlsx
 
