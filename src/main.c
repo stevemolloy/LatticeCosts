@@ -7,8 +7,13 @@
 
 double block_costs[BLOCK_COUNT] = {0};
 double block_mass[BLOCK_COUNT] = {0};
+
 double cooling_costs[COOLING_COUNT];
 CostType cooling_cost_types[COOLING_COUNT];
+
+double magPS_costs[MAG_COUNT];
+CostType magPS_cost_types[MAG_COUNT];
+
 double EUR_PER_METRICTONNE_STEEL;
 
 LatticeDefinition global_latt_defns[LATT_COUNT];
@@ -20,7 +25,7 @@ void *active_alloc(size_t size)              { return sdm_arena_alloc(active_are
 void *active_realloc(void *ptr, size_t size) { return sdm_arena_realloc(active_arena, ptr, size); }
 
 void usage(FILE *sink, const char *programname) {
-  fprintf(sink, "%s -o <lattice_summary_xls_file> [-o <output_filename>]\n", programname);
+  fprintf(sink, "%s <lattice_summary_xls_file> [-o <output_filename>]\n", programname);
 }
 
 int main(int argc, char *argv[]) {
@@ -50,6 +55,7 @@ int main(int argc, char *argv[]) {
   set_lattice_definitions();
   set_block_costs();
   set_cooling_costs();
+  set_magPS_costs();
 
   // Get data from lattice summary spreadsheet
   FamilyDefns fam_defns = {0};
@@ -62,28 +68,33 @@ int main(int argc, char *argv[]) {
     REPORT_AND_DIE("ERROR: Cannot open .xlsx file: %s\n", famcircuitsdefnfilename);
 
   // Calculate costs from this data
-  double *block_work_costs = SDM_MALLOC(fam_defns.length * sizeof(double));
-  double *cooling_work_costs = SDM_MALLOC(fam_defns.length * sizeof(double));
   BlockWork *block_work_details = SDM_MALLOC(fam_defns.length * BLOCK_COUNT * sizeof(BlockWork));
   bool new_ps_needed[LATT_COUNT][MAG_COUNT];
+
+  double *block_work_costs   = SDM_MALLOC(fam_defns.length * sizeof(double));
+  double *cooling_work_costs = SDM_MALLOC(fam_defns.length * sizeof(double));
+  double *mag_ps_costs       = SDM_MALLOC(fam_defns.length * sizeof(double));
 
   for (size_t i=0; i<fam_defns.length; i++) {
     FamilyDefn fam = fam_defns.data[i];
     LatticeType lattice_type = get_lattice_type_from_name(fam.name);
-    if (!get_blocks_work_details(fam, &block_work_details[i*BLOCK_COUNT], BLOCK_COUNT)) continue;
-    block_work_costs[i] = total_block_work_costs(fam, &block_work_details[i*BLOCK_COUNT], block_costs, BLOCK_COUNT);
-    cooling_work_costs[i] = total_cooling_work_costs(&block_work_details[i*BLOCK_COUNT], cooling_costs, cooling_cost_types, COOLING_COUNT);
 
+    if (!get_blocks_work_details(fam, &block_work_details[i*BLOCK_COUNT], BLOCK_COUNT)) continue;
     for (size_t j=0; j<MAG_COUNT; j++) {
       if (circuits_in_latticefamily.circuits[LATT_A01][j] == 0 && circuits_in_latticefamily.circuits[lattice_type][j] > 0) {
         new_ps_needed[get_lattice_type_from_name(fam.name)][j] = true;
       }
     }
+
+    block_work_costs[i]   = total_block_work_costs(fam, &block_work_details[i*BLOCK_COUNT], block_costs, BLOCK_COUNT);
+    cooling_work_costs[i] = total_cooling_work_costs(&block_work_details[i*BLOCK_COUNT], cooling_costs, cooling_cost_types, COOLING_COUNT);
+    mag_ps_costs[i]       = total_mag_ps_costs(new_ps_needed[lattice_type], magPS_costs, magPS_cost_types, MAG_COUNT);
   }
   
   Costs all_costs = {0};
   SDM_ARRAY_PUSH(all_costs, block_work_costs);
   SDM_ARRAY_PUSH(all_costs, cooling_work_costs);
+  SDM_ARRAY_PUSH(all_costs, mag_ps_costs);
   if (out_filename != NULL) {
     outfile = fopen(out_filename, "w");
     if (outfile == NULL)

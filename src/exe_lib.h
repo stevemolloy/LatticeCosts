@@ -149,6 +149,20 @@ typedef enum {
   COOLING_COUNT,
 } CoolingWork;
 
+// typedef enum {
+//   MAGPS_DIP,
+//   MAGPS_QDE,
+//   MAGPS_QFE,
+//   MAGPS_SXFI,
+//   MAGPS_SXFO,
+//   MAGPS_SXDE,
+//   MAGPS_QFM,
+//   MAGPS_SXFM,
+//   MAGPS_SXD,
+//   MAGPS_QF,
+//   MAGPS_COUNT,
+// } MagPSCosts;
+
 typedef enum {
   COSTTYPE_INDEPENDENT,
   COSTTYPE_PERACHRO,
@@ -169,10 +183,12 @@ void set_block_masses(void);
 void set_block_build_costs(void);
 void set_block_costs(void);
 void set_cooling_costs(void);
+void set_magPS_costs(void);
 bool fake_magnet(MagType type);
 bool get_blocks_work_details(FamilyDefn fam, BlockWork *blocks_replaced_array, size_t num_blocks);
 double total_block_work_costs(FamilyDefn fam, BlockWork *block_work, double *costs, size_t block_count);
 double total_cooling_work_costs(BlockWork *block_work, double *costs, CostType *cost_types, size_t costs_length);
+double total_mag_ps_costs(bool *new_ps_needed, double *magPS_costs, CostType *cost_types, size_t costs_length);
 int print_sheet_name(const char *name, void *callbackdata);
 int get_lattice_summaries(const char *latt_summ_filename, FamilyDefns *fam_defns, Info *info);
 int get_circuits_per_family(const char *circuit_def_filename, CircuitsInFamilyDefn *circuits_in_latticefamily);

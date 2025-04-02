@@ -290,6 +290,38 @@ BlockWork work_due_to_mag(int cl) {
   exit(1);
 }
 
+double total_mag_ps_costs(bool *new_ps_needed, double *magPS_costs, CostType *cost_types, size_t mag_count) {
+  double cost = 0;
+
+  for (size_t i=0; i<mag_count; i++) {
+    if (fake_magnet(i)) continue;
+    if (!new_ps_needed[i]) continue;
+
+    switch (cost_types[i]) {
+      case COSTTYPE_INDEPENDENT:
+      case COSTTYPE_PERACHRO: {
+        cost += magPS_costs[i];
+        break;
+      }
+      case COSTTYPE_PERBLK: {
+        cost += magPS_costs[i] * BLOCK_COUNT;
+        break;
+      }
+      case COSTTYPE_PERACHRO_IF_CHNGD:
+      case COSTTYPE_PERBLK_IF_CHNGD: {
+        fprintf(stderr, "ERROR: No magPS costs have this cost type\n");
+        exit(1);
+      }
+      case COSTTYPE_COUNT: {
+        fprintf(stderr, "UNREACHABLE\n");
+        exit(1);
+      }
+    }
+  }
+
+  return cost;
+}
+
 double total_cooling_work_costs(BlockWork *block_work, double *costs, CostType *cost_types, size_t costs_length) {
   double cost = 0;
   for (size_t cost_ind=0; cost_ind<costs_length; cost_ind++) {
