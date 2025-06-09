@@ -399,7 +399,7 @@ double total_block_work_costs(FamilyDefn fam, BlockWork *block_work, double *cos
             cost += 4 * POLECOST;
             break;
           }
-					case MAG_R3Q: case MAG_R3D: case MAG_R3OFFS: {
+		  case MAG_R3Q: case MAG_R3D: case MAG_R3OFFS: {
             if (R3added) break;
             R3added = true;
             cost += 4 * POLECOST;
