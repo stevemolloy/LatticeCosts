@@ -15,6 +15,7 @@ extern double block_costs[BLOCK_COUNT];
 extern double EUR_PER_METRICTONNE_STEEL;
 double EUR2SEK;
 double POLECOST;
+double POLEFACESTRIPCOST;
 
 void set_block_costs(void) {
   set_block_build_costs();
@@ -379,9 +380,12 @@ double total_block_work_costs(FamilyDefn fam, BlockWork *block_work, double *cos
           exit(1);
         } else if (work_needed == BLK_WORK_NONE) continue;
         switch ((MagType)mag_ind) {
-          case MAG_D1: case MAG_D1Q: case MAG_D2: case MAG_D2Q: case MAG_D3: case MAG_D3Q: {
+          case MAG_D1: case MAG_D2: case MAG_D3: {
             fprintf(stderr, "ERROR: This is a bug. Dipoles should not be possible here.\n");
             exit(1);
+          } break;
+          case MAG_D1Q: case MAG_D2Q: case MAG_D3Q: {
+            cost += 2 * POLEFACESTRIPCOST;
           } break;
           case MAG_Q1: case MAG_Q2: case MAG_Q3: case MAG_Q4: case MAG_Q5: case MAG_Q6: {
             cost += 4 * POLECOST;
