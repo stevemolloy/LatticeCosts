@@ -79,7 +79,8 @@ int main(int argc, char *argv[]) {
     FamilyDefn fam = fam_defns.data[i];
     LatticeType lattice_type = get_lattice_type_from_name(fam.name);
 
-    if (!get_blocks_work_details(fam, &block_work_details[i*BLOCK_COUNT], BLOCK_COUNT)) continue;
+    if (!get_blocks_work_details(fam, &block_work_details[i*BLOCK_COUNT], BLOCK_COUNT)) 
+      continue;
     for (size_t j=0; j<MAG_COUNT; j++) {
       if (circuits_in_latticefamily.circuits[LATT_A01][j] == 0 && circuits_in_latticefamily.circuits[lattice_type][j] > 0) {
         new_ps_needed[get_lattice_type_from_name(fam.name)][j] = true;
