@@ -725,7 +725,9 @@ int get_fam_locs_callback(size_t row, size_t col, const char* value, void* callb
   if (value == NULL) return 0;
   if (row != 2) return 0;
 
-  if (strcmp(value, "Hardware Check\n?")==0) {
+  if (strcmp(value, "ε\n [pmrad]") == 0) {
+    fam_locs->Emittance = col;
+  } else if (strcmp(value, "Hardware Check\n?")==0) {
     fam_locs->HW_check = col;
   } else if (strcmp(value, "Last Updated")==0) {
     fam_locs->LastUpdated = col;
@@ -860,11 +862,29 @@ int get_fam_locs_callback(size_t row, size_t col, const char* value, void* callb
     if (fam_locs->S1_combinedq_value == 0) fam_locs->S1_combinedq_value = col + 1;
     else fam_locs->S1_combinedq_cl = col + 1;
   }
+  else if (strcmp(value, "S2_combined")==0) {
+    if (fam_locs->S2_combineds_value == 0) fam_locs->S2_combineds_value = col;
+    else fam_locs->S2_combineds_cl = col;
+    if (fam_locs->S2_combinedq_value == 0) fam_locs->S2_combinedq_value = col + 1;
+    else fam_locs->S2_combinedq_cl = col + 1;
+  }
   else if (strcmp(value, "S3_combined")==0) {
     if (fam_locs->S3_combineds_value == 0) fam_locs->S3_combineds_value = col;
     else fam_locs->S3_combineds_cl = col;
     if (fam_locs->S3_combinedq_value == 0) fam_locs->S3_combinedq_value = col + 1;
     else fam_locs->S3_combinedq_cl = col + 1;
+  }
+  else if (strcmp(value, "S4_combined")==0) {
+    if (fam_locs->S4_combineds_value == 0) fam_locs->S4_combineds_value = col;
+    else fam_locs->S4_combineds_cl = col;
+    if (fam_locs->S4_combinedq_value == 0) fam_locs->S4_combinedq_value = col + 1;
+    else fam_locs->S4_combinedq_cl = col + 1;
+  }
+  else if (strcmp(value, "S5_combined")==0) {
+    if (fam_locs->S5_combineds_value == 0) fam_locs->S5_combineds_value = col;
+    else fam_locs->S5_combineds_cl = col;
+    if (fam_locs->S5_combinedq_value == 0) fam_locs->S5_combinedq_value = col + 1;
+    else fam_locs->S5_combinedq_cl = col + 1;
   }
   else if (strcmp(value, "S6_combined")==0) {
     if (fam_locs->S6_combineds_value == 0) fam_locs->S6_combineds_value = col;
@@ -892,7 +912,8 @@ int get_fam_strengths_callback(size_t row, size_t col, const char* value, void* 
 
   size_t index_of_last = fam_defns->length - 1;
 
-  if      (col == fam_defns->fam_locs.D1_value) fam_defns->data[index_of_last].values[MAG_D1] = strtod(value, NULL);
+  if      (col == fam_defns->fam_locs.Emittance) fam_defns->data[index_of_last].emittance = strtod(value, NULL);
+  else if (col == fam_defns->fam_locs.D1_value) fam_defns->data[index_of_last].values[MAG_D1] = strtod(value, NULL);
   else if (col == fam_defns->fam_locs.D2_value) fam_defns->data[index_of_last].values[MAG_D2] = strtod(value, NULL);
   else if (col == fam_defns->fam_locs.D3_value) fam_defns->data[index_of_last].values[MAG_D3] = strtod(value, NULL);
   else if (col == fam_defns->fam_locs.D1q_value) fam_defns->data[index_of_last].values[MAG_D1Q] = strtod(value, NULL);
@@ -1127,6 +1148,7 @@ bool fake_magnet(MagType type) {
 
 void print_header(FILE *sink) {
   fprintf(sink, "Lattice name, ");
+  fprintf(sink, "Emittance (pmrad), ");
   for (size_t i=0; i<BLOCK_COUNT; i++) {
     if (i != 0) fprintf(sink, ", ");
     fprintf(sink, "%s", block_type_string(i));
@@ -1155,6 +1177,8 @@ void print_header(FILE *sink) {
 
 void print_lattice_details(FILE *sink, FamilyDefn fam, double block_work_cost, double cooling_work_cost, BlockWork *block_work_details, size_t num_blocks, bool *new_ps_needed) {
   fprintf(sink, "%s", fam.name);
+  fprintf(sink, ", ");
+  fprintf(sink, "%f", fam.emittance);
   fprintf(sink, ", ");
   print_block_work_info(sink, block_work_details, num_blocks);
   fprintf(sink, ", ");

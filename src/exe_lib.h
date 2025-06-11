@@ -81,11 +81,13 @@ typedef struct {
   size_t S1_combineds_cl, S1_combinedq_cl, S2_combineds_cl, S2_combinedq_cl, S3_combineds_cl, S3_combinedq_cl;
   size_t S4_combineds_cl, S4_combinedq_cl, S5_combineds_cl, S5_combinedq_cl,  S6_combineds_cl, S6_combinedq_cl;
   size_t HW_check;
+  size_t Emittance;
   size_t LastUpdated, MagLimitsDate, Description, Comment;
 } FamilyLocations;
 
 typedef struct {
   char *name;
+  double emittance;
   double values[MAG_COUNT];
   int cls[MAG_COUNT];
   float lastupdated;
