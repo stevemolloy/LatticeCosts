@@ -691,6 +691,10 @@ const char *string_from_magtype(MagType type) {
 	case MAG_S6_COMBINEDS: return "S6_COMBINEDS";
 	case MAG_S6_COMBINEDQ: return "S6_COMBINEDQ";
     case MAG_COUNT: return "COUNT";
+    default: {
+      fprintf(stderr, "ERROR: Memory corruption in string_from_magtype function\n");
+      exit(1);
+    }
   }
 }
 
@@ -1033,7 +1037,8 @@ const char *block_type_string(BlockType t) {
     case BLOCK_U4: return "U4";
     case BLOCK_U5: return "U5";
     case BLOCK_M2: return "M2";
-    case BLOCK_COUNT: {
+    case BLOCK_COUNT:
+    default: {
       fprintf(stderr, "ERROR: Block type is ill-defined. This should be unreachable.\n");
       exit(1);
     }
@@ -1083,7 +1088,7 @@ char* days_to_date(float days) {
   int year = 1900;
   int month = 1;
   int day = 1;
-  size_t timestamp_len = 32;
+  size_t timestamp_len = 128;
   char *date = SDM_MALLOC(timestamp_len);
   
   // Adjust for correct day alignment
@@ -1143,6 +1148,10 @@ bool fake_magnet(MagType type) {
     case MAG_S4_COMBINEDQ: case MAG_S5_COMBINEDQ: case MAG_S6_COMBINEDQ:
     case MAG_COUNT:
       return true;
+    default: {
+      fprintf(stderr, "ERROR: Memory corruption in fake_magnet function\n");
+      exit(1);
+    }
   }
 }
 

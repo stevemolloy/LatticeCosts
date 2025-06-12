@@ -1,10 +1,10 @@
-CC=clang
+CC=gcc
 CFLAGS = -Wall -Wpedantic -Wextra -Wshadow -Wvla -std=c99 -ggdb
 ifeq ($(CC), clang)
 	CFLAGS +=  -fsanitize=undefined,address
 endif
 CINCLUDES =
-CLIBS = -lxlsxio_read
+CLIBS = -lxlsxio_read -lm
 
 SRC = src
 OBJ = objs
