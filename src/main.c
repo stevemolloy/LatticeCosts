@@ -105,8 +105,6 @@ int main(int argc, char *argv[]) {
   print_header(outfile);
   for (size_t i=0; i<fam_defns.length; i++) {
     FamilyDefn fam = fam_defns.data[i];
-    if (strcmp(fam.name, "241011_b03_03_08_07") == 0)
-      continue;
     print_lattice_details(outfile, fam, block_work_costs[i], cooling_work_costs[i], &block_work_details[i*BLOCK_COUNT], BLOCK_COUNT, new_ps_needed[get_lattice_type_from_name(fam.name)]);
   }
 
