@@ -1149,6 +1149,12 @@ bool fake_magnet(MagType type) {
 void print_header(FILE *sink) {
   fprintf(sink, "Lattice name, ");
   fprintf(sink, "Emittance (pmrad), ");
+  fprintf(sink, "TOTAL COST (M.SEK)");
+  fprintf(sink, ", ");
+  fprintf(sink, "Block Cost (k.SEK)");
+  fprintf(sink, ", ");
+  fprintf(sink, "Cooling Cost (k.SEK)");
+  fprintf(sink, ", ");
   for (size_t i=0; i<BLOCK_COUNT; i++) {
     if (i != 0) fprintf(sink, ", ");
     fprintf(sink, "%s", block_type_string(i));
@@ -1159,12 +1165,6 @@ void print_header(FILE *sink) {
     fprintf(sink, "New %s PS?", string_from_magtype(i));
     fprintf(sink, ", ");
   }
-  fprintf(sink, "Block Cost (k.SEK)");
-  fprintf(sink, ", ");
-  fprintf(sink, "Cooling Cost (k.SEK)");
-  fprintf(sink, ", ");
-  fprintf(sink, "TOTAL COST (M.SEK)");
-  fprintf(sink, ", ");
   fprintf(sink, "Last Updated");
   fprintf(sink, ", ");
   fprintf(sink, "Magnet Limits Date");
@@ -1180,6 +1180,12 @@ void print_lattice_details(FILE *sink, FamilyDefn fam, double block_work_cost, d
   fprintf(sink, ", ");
   fprintf(sink, "%f", fam.emittance);
   fprintf(sink, ", ");
+  fprintf(sink, "%0.1f", NUM_ACHROMATS * (block_work_cost + cooling_work_cost)/1e6);
+  fprintf(sink, ", ");
+  fprintf(sink, "%0.1f", NUM_ACHROMATS * block_work_cost/1e3);
+  fprintf(sink, ", ");
+  fprintf(sink, "%0.1f", NUM_ACHROMATS * cooling_work_cost/1e3);
+  fprintf(sink, ", ");
   print_block_work_info(sink, block_work_details, num_blocks);
   fprintf(sink, ", ");
   for (size_t i=0; i<MAG_COUNT; i++) {
@@ -1187,12 +1193,6 @@ void print_lattice_details(FILE *sink, FamilyDefn fam, double block_work_cost, d
     fprintf(sink, "%s", new_ps_needed[i] ? "Y" : "-");
     fprintf(sink, ", ");
   }
-  fprintf(sink, "%0.1f", NUM_ACHROMATS * block_work_cost/1e3);
-  fprintf(sink, ", ");
-  fprintf(sink, "%0.1f", NUM_ACHROMATS * cooling_work_cost/1e3);
-  fprintf(sink, ", ");
-  fprintf(sink, "%0.1f", NUM_ACHROMATS * (block_work_cost + cooling_work_cost)/1e6);
-  fprintf(sink, ", ");
   if (fam.lastupdated) fprintf(sink, "%s", days_to_date(fam.lastupdated));
   else fprintf(sink, "-");
   fprintf(sink, ", ");
