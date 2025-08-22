@@ -1016,7 +1016,11 @@ int get_fam_strengths_callback(size_t row, size_t col, const char* value, void* 
     size_t sz = strlen(value);
     fam_defns->data[index_of_last].comment = SDM_MALLOC(sz + 1);
     memcpy(fam_defns->data[index_of_last].comment, value, sz);
-    for (size_t i=0; i<sz; i++) if (fam_defns->data[index_of_last].comment[i]==',') fam_defns->data[index_of_last].comment[i] = ' ';
+    for (size_t i=0; i<sz; i++) {
+        if (fam_defns->data[index_of_last].comment[i]=='\n' || fam_defns->data[index_of_last].comment[i]==',') {
+            fam_defns->data[index_of_last].comment[i] = ' ';
+        }
+    }
   } else if (col == fam_defns->fam_locs.HW_check) {
     if (value != NULL) {
       if (strncmp(value, "Y", 1) == 0) {
