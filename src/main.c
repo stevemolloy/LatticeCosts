@@ -43,6 +43,10 @@ int main(int argc, char *argv[]) {
 
   while (argc > 0) {
     const char *input_arg = sdm_shift_args(&argc, &argv);
+    if (strcmp(input_arg, "--help")==0 || strcmp(input_arg, "-h")==0) {
+        usage(stdout, programname);
+        return 0;
+    }
     if (strcmp(input_arg, "-o")==0) {
       if (argc < 1) REPORT_AND_DIE("ERROR: %s flag should be followed by a filename\n", input_arg);
       out_filename = sdm_shift_args(&argc, &argv);
